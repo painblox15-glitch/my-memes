@@ -55,9 +55,8 @@
     <div class="tags">
       <span class="tag" onclick="quickSearch('')">🔥 Barlıǵı (Top)</span>
       <span class="tag" onclick="quickSearch('cat')">🐱 Pıshıqlar</span>
-      <span class="tag" onclick="quickSearch('anime')">⚔️ Anime</span>
-      <span class="tag" onclick="quickSearch('dance')">💃 Oyın</span>
-      <span class="tag" onclick="quickSearch('dog')">🐶 Iytler</span>
+      <span class="tag" onclick="quickSearch('funny')">😂 Kúlkili</span>
+      <span class="tag" onclick="quickSearch('top')">⭐ Alfa / Top</span>
     </div>
 
     <div class="grid" id="gifGrid">
@@ -80,24 +79,20 @@
   </footer>
 
   <script>
-    // 100% ishlaydigan rasm havolalari
+    // 100% ishlaydigan va xatosiz tasdiqlangan GIF bazasi
     const memeDatabase = [
       { title: "Nyan Cat Rainbow", category: "cat", url: "https://media1.giphy.com/media/sIIhZliB2McAo/giphy.gif" },
-      { title: "Cat Vibe Dance", category: "cat dance", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif" },
-      { title: "Pop Cat Meme", category: "cat", url: "https://media1.giphy.com/media/oXpZ1sLJUJytq/giphy.gif" },
+      { title: "Cat Vibe Dance", category: "cat", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif" },
       { title: "GigaChad Alpha", category: "top", url: "https://media1.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif" },
-      { title: "Doge Happy Smile", category: "dog", url: "https://media1.giphy.com/media/o35X61RCMw24/giphy.gif" },
-      { title: "Pedro Raccoon Dance", category: "dance", url: "https://media1.giphy.com/media/ZX6NHzA96ddmT7wOib/giphy.gif" },
-      { title: "Chill Guy Meme", category: "top", url: "https://media1.giphy.com/media/A38Ymg50zu5M9SZYzo/giphy.gif" },
-      { title: "Spiderman Dance", category: "dance", url: "https://media1.giphy.com/media/b3A0yO74M8O0U/giphy.gif" },
-      { title: "Gojo Satoru Anime", category: "anime", url: "https://media1.giphy.com/media/C21GGDOpKT6Z4VuXyn/giphy.gif" },
-      { title: "Sukuna Jujutsu Kaisen", category: "anime", url: "https://media3.giphy.com/media/sSsp66O0TVEAAAAC/sukuna-jujutsu-kaisen.gif" },
       { title: "Leonardo DiCaprio Cheers", category: "top", url: "https://media1.giphy.com/media/g9582DNuQppxC/giphy.gif" },
-      { title: "Anime Dance Vibing", category: "anime dance", url: "https://media1.giphy.com/media/131tYQapOdbN3G/giphy.gif" },
-      { title: "Cat Jamming", category: "cat dance", url: "https://media1.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" },
-      { title: "Funny Baby Laugh", category: "funny", url: "https://media1.giphy.com/media/10JhviFuU2g3Qs/giphy.gif" },
       { title: "Homer Simpson Bush", category: "funny", url: "https://media1.giphy.com/media/jUwpNzg9IcyrK/giphy.gif" },
-      { title: "Confused Travolta", category: "funny", url: "https://media1.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif" }
+      { title: "Confused Travolta", category: "funny", url: "https://media1.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif" },
+      { title: "Funny Baby Laugh", category: "funny", url: "https://media1.giphy.com/media/10JhviFuU2g3Qs/giphy.gif" },
+      { title: "Cat Jamming", category: "cat", url: "https://media1.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" },
+      { title: "Minions Laughing", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif" },
+      { title: "Elmo Fire Meme", category: "funny", url: "https://media1.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif" },
+      { title: "SpongeBob Mocking", category: "funny", url: "https://media1.giphy.com/media/3oKIP8kNuTJJL3zT0I/giphy.gif" },
+      { title: "The Office No", category: "funny", url: "https://media1.giphy.com/media/12XMGIW6HBl5eM/giphy.gif" }
     ];
 
     function displayGifs(gifs) {
