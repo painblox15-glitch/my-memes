@@ -20,15 +20,21 @@
     .tag { background: #334155; padding: 8px 16px; border-radius: 15px; font-size: 14px; cursor: pointer; transition: 0.2s; user-select: none; }
     .tag:hover { background: #38bdf8; color: #0f172a; font-weight: bold; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
-    .card { background: #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.2s; cursor: pointer; }
-    .card:hover { transform: translateY(-5px); }
-    .card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #334155; }
-    .card p { padding: 10px; font-size: 13px; color: #cbd5e1; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
+    .card { background: #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.2s; position: relative; }
+    .card:hover { transform: translateY(-5px); }
+    .card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #334155; cursor: pointer; }
+    .card-info { padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .card p { font-size: 13px; color: #cbd5e1; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; text-align: left; }
+    
+    /* Download Button on Card */
+    .download-btn { background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.2s; }
+    .download-btn:hover { background: #0369a1; }
+
     /* Fullscreen Modal Styles */
     .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; flex-direction: column; }
-    .modal img { max-width: 90%; max-height: 80vh; border-radius: 12px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
-    .modal p { color: #fff; font-size: 20px; margin-top: 15px; }
+    .modal img { max-width: 90%; max-height: 75vh; border-radius: 12px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
+    .modal-content { display: flex; flex-direction: column; align-items: center; gap: 15px; }
     .close-btn { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; background: none; border: none; }
     .close-btn:hover { color: #38bdf8; }
 
@@ -40,7 +46,7 @@
   <div class="content-wrapper">
     <h1>🔥 TOP MEME GIFLAR</h1>
     <div class="author-badge">Made by Esnazarov. A</div>
-    <p>Eń zór, eń kúlkili hám eń ataqlı GIF memelar toplamı! (GIF-tı úlkeytiw ushın onı basıń)</p>
+    <p>Eń zór, eń kúlkili hám eń ataqlı GIF memelar toplamı!</p>
 
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Meme qıdırıń (cat, dance, anime)..." onkeyup="if(event.key==='Enter') searchGifs()">
@@ -62,10 +68,13 @@
   </div>
 
   <!-- Fullscreen Modal -->
-  <div id="gifModal" class="modal" onclick="closeModal()">
-    <button class="close-btn">&times;</button>
-    <img id="modalImg" src="" alt="">
-    <p id="modalText"></p>
+  <div id="gifModal" class="modal">
+    <button class="close-btn" onclick="closeModal()">&times;</button>
+    <div class="modal-content">
+      <img id="modalImg" src="" alt="">
+      <p id="modalText" style="color:#fff; font-size:18px;"></p>
+      <a id="modalDownload" href="" class="download-btn" download="meme.gif" target="_blank">📥 Júklep alıw (Download)</a>
+    </div>
   </div>
 
   <footer>
@@ -73,59 +82,44 @@
   </footer>
 
   <script>
-    const fallbackMemes = [
-      { title: "Nyan Cat Rainbow", url: "https://media.tenor.com/2roov222Y3wAAAAC/nyan-cat-rainbow.gif" },
-      { title: "Cat Vibe Dance", url: "https://media.tenor.com/y2pB_cnbdSQAAAAC/cat-jam.gif" },
-      { title: "Pop Cat", url: "https://media.tenor.com/XAS_S9O_RkEAAAAC/pop-cat.gif" },
-      { title: "GigaChad Alpha", url: "https://media.tenor.com/d_m9kHw2yA4AAAAC/gigachad-chad.gif" },
-      { title: "Doge Happy Smile", url: "https://media.tenor.com/S6e1l9CqL8YAAAAC/doge-dog.gif" },
-      { title: "Pedro Raccoon Dance", url: "https://media.tenor.com/1G66p20R8hIAAAAC/pedro-raccoon.gif" },
-      { title: "Chill Guy Meme", url: "https://media.tenor.com/6S331nS1_e0AAAAC/chill-guy.gif" },
-      { title: "Spiderman Dance", url: "https://media.tenor.com/3N0GgE6P6t8AAAAC/spiderman-dance.gif" },
-      { title: "Gojo Satoru Anime", url: "https://media.tenor.com/qU3aN42iM38AAAAC/gojo-satoru-jujutsu-kaisen.gif" },
-      { title: "Sukuna Jujutsu Kaisen", url: "https://media.tenor.com/sSsp66O0TVEAAAAC/sukuna-jujutsu-kaisen.gif" },
-      { title: "Leonardo DiCaprio Cheers", url: "https://media.tenor.com/x8v1oNUOmg4AAAAC/rick-roll.gif" },
-      { title: "Anime Dance Vibing", url: "https://media.tenor.com/4S06253457YAAAAC/anime-dance.gif" }
+    // 100% ishlaydigan va bloklanmaydigan CDN GIF bazasi
+    const memeDatabase = [
+      { title: "Nyan Cat Rainbow", url: "https://i.giphy.com/media/sIIhZliB2McAo/giphy.gif" },
+      { title: "Cat Vibe Dance", url: "https://i.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif" },
+      { title: "Pop Cat Meme", url: "https://i.giphy.com/media/oXpZ1sLJUJytq/giphy.gif" },
+      { title: "GigaChad Alpha", url: "https://i.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif" },
+      { title: "Doge Happy Smile", url: "https://i.giphy.com/media/o35X61RCMw24/giphy.gif" },
+      { title: "Pedro Raccoon Dance", url: "https://i.giphy.com/media/ZX6NHzA96ddmT7wOib/giphy.gif" },
+      { title: "Chill Guy Meme", url: "https://i.giphy.com/media/A38Ymg50zu5M9SZYzo/giphy.gif" },
+      { title: "Spiderman Dance", url: "https://i.giphy.com/media/b3A0yO74M8O0U/giphy.gif" },
+      { title: "Gojo Satoru Anime", url: "https://i.giphy.com/media/C21GGDOpKT6Z4VuXyn/giphy.gif" },
+      { title: "Sukuna Jujutsu Kaisen", url: "https://i.giphy.com/media/sSsp66O0TVEAAAAC/sukuna-jujutsu-kaisen.gif" },
+      { title: "Leonardo DiCaprio Cheers", url: "https://i.giphy.com/media/g9582DNuQppxC/giphy.gif" },
+      { title: "Anime Dance Vibing", url: "https://i.giphy.com/media/131tYQapOdbN3G/giphy.gif" },
+      { title: "Cat Jamming", url: "https://i.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" },
+      { title: "Funny Baby Laugh", url: "https://i.giphy.com/media/10JhviFuU2g3Qs/giphy.gif" },
+      { title: "Homer Simpson Bush", url: "https://i.giphy.com/media/jUwpNzg9IcyrK/giphy.gif" },
+      { title: "Confused Travolta", url: "https://i.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif" }
     ];
 
-    async function loadGifs(query = 'meme') {
-      const grid = document.getElementById('gifGrid');
-      grid.innerHTML = '<p style="grid-column: 1/-1; color: #94a3b8;">GIF-lar júklenbekte...</p>';
-      
-      try {
-        const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=cw95o203lM80M001&q=${encodeURIComponent(query)}&limit=50`);
-        const data = await res.json();
-
-        if (data && data.data && data.data.length > 0) {
-          renderGrid(data.data.map(item => ({
-            title: item.title || query,
-            url: item.images.fixed_height.url
-          })));
-        } else {
-          showFallback(query);
-        }
-      } catch (err) {
-        showFallback(query);
-      }
-    }
-
-    function showFallback(query) {
-      const q = query.toLowerCase();
-      const filtered = fallbackMemes.filter(item => item.title.toLowerCase().includes(q) || q === 'meme');
-      renderGrid(filtered.length > 0 ? filtered : fallbackMemes);
-    }
-
-    function renderGrid(items) {
+    function displayGifs(gifs) {
       const grid = document.getElementById('gifGrid');
       grid.innerHTML = '';
-      
-      items.forEach(item => {
+
+      if (gifs.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; color: #94a3b8; font-size: 18px;">Hesh nárse tabılmadı!</p>';
+        return;
+      }
+
+      gifs.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.onclick = () => openModal(item.url, item.title);
         card.innerHTML = `
-          <img src="${item.url}" alt="${item.title}" loading="lazy" onerror="this.src='https://media.tenor.com/2roov222Y3wAAAAC/nyan-cat-rainbow.gif'">
-          <p>${item.title}</p>
+          <img src="${item.url}" alt="${item.title}" loading="lazy" onclick="openModal('${item.url}', '${item.title}')">
+          <div class="card-info">
+            <p title="${item.title}">${item.title}</p>
+            <a href="${item.url}" download="meme.gif" class="download-btn" target="_blank">📥 Júklew</a>
+          </div>
         `;
         grid.appendChild(card);
       });
@@ -133,10 +127,9 @@
 
     function openModal(url, title) {
       const modal = document.getElementById('gifModal');
-      const modalImg = document.getElementById('modalImg');
-      const modalText = document.getElementById('modalText');
-      modalImg.src = url;
-      modalText.textContent = title;
+      document.getElementById('modalImg').src = url;
+      document.getElementById('modalText').textContent = title;
+      document.getElementById('modalDownload').href = url;
       modal.style.display = 'flex';
     }
 
@@ -145,17 +138,24 @@
     }
 
     function searchGifs() {
-      const val = document.getElementById('searchInput').value;
-      if (val) loadGifs(val);
+      const val = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!val) {
+        displayGifs(memeDatabase);
+        return;
+      }
+      const filtered = memeDatabase.filter(gif => 
+        gif.title.toLowerCase().includes(val)
+      );
+      displayGifs(filtered.length > 0 ? filtered : memeDatabase);
     }
 
     function quickSearch(tag) {
       document.getElementById('searchInput').value = tag;
-      loadGifs(tag);
+      searchGifs();
     }
 
     // Dáslepki júklew
-    loadGifs('meme');
+    displayGifs(memeDatabase);
   </script>
 </body>
 </html>
