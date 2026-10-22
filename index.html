@@ -25,15 +25,14 @@
     .card:hover { transform: translateY(-5px); }
     .card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #334155; cursor: pointer; }
     .card-info { padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-    .card p { font-size: 13px; color: #cbd5e1; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; text-align: left; }
+    .card p { font-size: 13px; color: #cbd5e1; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; text-align: left; }
     
-    /* Download Button on Card */
-    .download-btn { background: #0284c7; color: white; border: none; padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.2s; }
+    .download-btn { background: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.2s; display: inline-block; }
     .download-btn:hover { background: #0369a1; }
 
     /* Fullscreen Modal Styles */
     .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; flex-direction: column; }
-    .modal img { max-width: 90%; max-height: 75vh; border-radius: 12px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
+    .modal img { max-width: 90%; max-height: 70vh; border-radius: 12px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
     .modal-content { display: flex; flex-direction: column; align-items: center; gap: 15px; }
     .close-btn { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; background: none; border: none; }
     .close-btn:hover { color: #38bdf8; }
@@ -54,12 +53,11 @@
     </div>
 
     <div class="tags">
-      <span class="tag" onclick="quickSearch('meme')">🔥 Top Memes</span>
+      <span class="tag" onclick="quickSearch('')">🔥 Barlıǵı (Top)</span>
       <span class="tag" onclick="quickSearch('cat')">🐱 Pıshıqlar</span>
       <span class="tag" onclick="quickSearch('anime')">⚔️ Anime</span>
       <span class="tag" onclick="quickSearch('dance')">💃 Oyın</span>
       <span class="tag" onclick="quickSearch('dog')">🐶 Iytler</span>
-      <span class="tag" onclick="quickSearch('funny')">😂 Kúlkili</span>
     </div>
 
     <div class="grid" id="gifGrid">
@@ -82,24 +80,24 @@
   </footer>
 
   <script>
-    // 100% ishlaydigan va bloklanmaydigan CDN GIF bazasi
+    // 100% ishlaydigan rasm havolalari
     const memeDatabase = [
-      { title: "Nyan Cat Rainbow", url: "https://i.giphy.com/media/sIIhZliB2McAo/giphy.gif" },
-      { title: "Cat Vibe Dance", url: "https://i.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif" },
-      { title: "Pop Cat Meme", url: "https://i.giphy.com/media/oXpZ1sLJUJytq/giphy.gif" },
-      { title: "GigaChad Alpha", url: "https://i.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif" },
-      { title: "Doge Happy Smile", url: "https://i.giphy.com/media/o35X61RCMw24/giphy.gif" },
-      { title: "Pedro Raccoon Dance", url: "https://i.giphy.com/media/ZX6NHzA96ddmT7wOib/giphy.gif" },
-      { title: "Chill Guy Meme", url: "https://i.giphy.com/media/A38Ymg50zu5M9SZYzo/giphy.gif" },
-      { title: "Spiderman Dance", url: "https://i.giphy.com/media/b3A0yO74M8O0U/giphy.gif" },
-      { title: "Gojo Satoru Anime", url: "https://i.giphy.com/media/C21GGDOpKT6Z4VuXyn/giphy.gif" },
-      { title: "Sukuna Jujutsu Kaisen", url: "https://i.giphy.com/media/sSsp66O0TVEAAAAC/sukuna-jujutsu-kaisen.gif" },
-      { title: "Leonardo DiCaprio Cheers", url: "https://i.giphy.com/media/g9582DNuQppxC/giphy.gif" },
-      { title: "Anime Dance Vibing", url: "https://i.giphy.com/media/131tYQapOdbN3G/giphy.gif" },
-      { title: "Cat Jamming", url: "https://i.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" },
-      { title: "Funny Baby Laugh", url: "https://i.giphy.com/media/10JhviFuU2g3Qs/giphy.gif" },
-      { title: "Homer Simpson Bush", url: "https://i.giphy.com/media/jUwpNzg9IcyrK/giphy.gif" },
-      { title: "Confused Travolta", url: "https://i.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif" }
+      { title: "Nyan Cat Rainbow", category: "cat", url: "https://media1.giphy.com/media/sIIhZliB2McAo/giphy.gif" },
+      { title: "Cat Vibe Dance", category: "cat dance", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif" },
+      { title: "Pop Cat Meme", category: "cat", url: "https://media1.giphy.com/media/oXpZ1sLJUJytq/giphy.gif" },
+      { title: "GigaChad Alpha", category: "top", url: "https://media1.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif" },
+      { title: "Doge Happy Smile", category: "dog", url: "https://media1.giphy.com/media/o35X61RCMw24/giphy.gif" },
+      { title: "Pedro Raccoon Dance", category: "dance", url: "https://media1.giphy.com/media/ZX6NHzA96ddmT7wOib/giphy.gif" },
+      { title: "Chill Guy Meme", category: "top", url: "https://media1.giphy.com/media/A38Ymg50zu5M9SZYzo/giphy.gif" },
+      { title: "Spiderman Dance", category: "dance", url: "https://media1.giphy.com/media/b3A0yO74M8O0U/giphy.gif" },
+      { title: "Gojo Satoru Anime", category: "anime", url: "https://media1.giphy.com/media/C21GGDOpKT6Z4VuXyn/giphy.gif" },
+      { title: "Sukuna Jujutsu Kaisen", category: "anime", url: "https://media3.giphy.com/media/sSsp66O0TVEAAAAC/sukuna-jujutsu-kaisen.gif" },
+      { title: "Leonardo DiCaprio Cheers", category: "top", url: "https://media1.giphy.com/media/g9582DNuQppxC/giphy.gif" },
+      { title: "Anime Dance Vibing", category: "anime dance", url: "https://media1.giphy.com/media/131tYQapOdbN3G/giphy.gif" },
+      { title: "Cat Jamming", category: "cat dance", url: "https://media1.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" },
+      { title: "Funny Baby Laugh", category: "funny", url: "https://media1.giphy.com/media/10JhviFuU2g3Qs/giphy.gif" },
+      { title: "Homer Simpson Bush", category: "funny", url: "https://media1.giphy.com/media/jUwpNzg9IcyrK/giphy.gif" },
+      { title: "Confused Travolta", category: "funny", url: "https://media1.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif" }
     ];
 
     function displayGifs(gifs) {
@@ -144,9 +142,9 @@
         return;
       }
       const filtered = memeDatabase.filter(gif => 
-        gif.title.toLowerCase().includes(val)
+        gif.title.toLowerCase().includes(val) || gif.category.toLowerCase().includes(val)
       );
-      displayGifs(filtered.length > 0 ? filtered : memeDatabase);
+      displayGifs(filtered);
     }
 
     function quickSearch(tag) {
