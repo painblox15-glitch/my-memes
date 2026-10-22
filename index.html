@@ -19,18 +19,25 @@
     .tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
     .tag { background: #334155; padding: 8px 16px; border-radius: 15px; font-size: 14px; cursor: pointer; transition: 0.2s; user-select: none; }
     .tag:hover { background: #38bdf8; color: #0f172a; font-weight: bold; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
     
-    .card { background: #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.2s; position: relative; }
-    .card:hover { transform: translateY(-5px); }
-    .card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #334155; cursor: pointer; }
-    .card-info { padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-    .card p { font-size: 13px; color: #cbd5e1; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; text-align: left; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
     
-    .download-btn { background: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.2s; display: inline-block; }
-    .download-btn:hover { background: #0369a1; }
+    /* AlphaCoders style card */
+    .card { background: #1e293b; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.4); text-align: left; display: flex; flex-direction: column; }
+    .card img { width: 100%; height: 210px; object-fit: cover; background: #334155; cursor: pointer; }
+    .card-title { padding: 12px 12px 5px 12px; font-size: 14px; font-weight: bold; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .card-actions { display: flex; padding: 10px 12px; gap: 6px; justify-content: space-between; border-bottom: 1px solid #334155; }
+    .action-btn { flex: 1; padding: 8px 0; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; color: white; transition: 0.2s; }
+    .btn-download { background: #0284c7; text-decoration: none; }
+    .btn-download:hover { background: #0369a1; }
+    .btn-like { background: #9333ea; }
+    .btn-like:hover { background: #7e22ce; }
+    .btn-likes-count { background: #10b981; pointer-events: none; }
 
-    /* Fullscreen Modal Styles */
+    .card-meta { display: flex; justify-content: space-between; padding: 10px 12px; font-size: 12px; color: #94a3b8; }
+
+    /* Fullscreen Modal */
     .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; flex-direction: column; }
     .modal img { max-width: 90%; max-height: 70vh; border-radius: 12px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
     .modal-content { display: flex; flex-direction: column; align-items: center; gap: 15px; }
@@ -70,7 +77,7 @@
     <div class="modal-content">
       <img id="modalImg" src="" alt="">
       <p id="modalText" style="color:#fff; font-size:18px;"></p>
-      <a id="modalDownload" href="" class="download-btn" download="meme.gif" target="_blank">📥 Júklep alıw (Download)</a>
+      <a id="modalDownload" href="" class="action-btn btn-download" download="meme.gif" target="_blank" style="padding: 10px 20px;">📥 Júklep alıw (Download)</a>
     </div>
   </div>
 
@@ -79,20 +86,19 @@
   </footer>
 
   <script>
-    // 100% ishlaydigan va xatosiz tasdiqlangan GIF bazasi
     const memeDatabase = [
-      { title: "Nyan Cat Rainbow", category: "cat", url: "https://media1.giphy.com/media/sIIhZliB2McAo/giphy.gif" },
-      { title: "Cat Vibe Dance", category: "cat", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif" },
-      { title: "GigaChad Alpha", category: "top", url: "https://media1.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif" },
-      { title: "Leonardo DiCaprio Cheers", category: "top", url: "https://media1.giphy.com/media/g9582DNuQppxC/giphy.gif" },
-      { title: "Homer Simpson Bush", category: "funny", url: "https://media1.giphy.com/media/jUwpNzg9IcyrK/giphy.gif" },
-      { title: "Confused Travolta", category: "funny", url: "https://media1.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif" },
-      { title: "Funny Baby Laugh", category: "funny", url: "https://media1.giphy.com/media/10JhviFuU2g3Qs/giphy.gif" },
-      { title: "Cat Jamming", category: "cat", url: "https://media1.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" },
-      { title: "Minions Laughing", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif" },
-      { title: "Elmo Fire Meme", category: "funny", url: "https://media1.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif" },
-      { title: "SpongeBob Mocking", category: "funny", url: "https://media1.giphy.com/media/3oKIP8kNuTJJL3zT0I/giphy.gif" },
-      { title: "The Office No", category: "funny", url: "https://media1.giphy.com/media/12XMGIW6HBl5eM/giphy.gif" }
+      { title: "Nyan Cat Rainbow", category: "cat", url: "https://media1.giphy.com/media/sIIhZliB2McAo/giphy.gif", size: "400x300", views: "6,412", likes: 45 },
+      { title: "Cat Vibe Dance", category: "cat", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif", size: "400x300", views: "8,920", likes: 89 },
+      { title: "GigaChad Alpha", category: "top", url: "https://media1.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif", size: "350x350", views: "15,430", likes: 320 },
+      { title: "Leonardo DiCaprio Cheers", category: "top", url: "https://media1.giphy.com/media/g9582DNuQppxC/giphy.gif", size: "400x250", views: "5,110", likes: 64 },
+      { title: "Homer Simpson Bush", category: "funny", url: "https://media1.giphy.com/media/jUwpNzg9IcyrK/giphy.gif", size: "400x300", views: "7,830", likes: 95 },
+      { title: "Confused Travolta", category: "funny", url: "https://media1.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif", size: "450x300", views: "4,210", likes: 38 },
+      { title: "Funny Baby Laugh", category: "funny", url: "https://media1.giphy.com/media/10JhviFuU2g3Qs/giphy.gif", size: "400x300", views: "9,650", likes: 142 },
+      { title: "Cat Jamming", category: "cat", url: "https://media1.giphy.com/media/vFKqnCdLPNOKc/giphy.gif", size: "400x300", views: "3,940", likes: 51 },
+      { title: "Minions Laughing", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif", size: "400x300", views: "11,200", likes: 210 },
+      { title: "Elmo Fire Meme", category: "funny", url: "https://media1.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif", size: "400x300", views: "14,890", likes: 295 },
+      { title: "SpongeBob Mocking", category: "funny", url: "https://media1.giphy.com/media/3oKIP8kNuTJJL3zT0I/giphy.gif", size: "400x300", views: "6,740", likes: 77 },
+      { title: "The Office No", category: "funny", url: "https://media1.giphy.com/media/12XMGIW6HBl5eM/giphy.gif", size: "400x300", views: "8,310", likes: 112 }
     ];
 
     function displayGifs(gifs) {
@@ -104,18 +110,31 @@
         return;
       }
 
-      gifs.forEach(item => {
+      gifs.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
           <img src="${item.url}" alt="${item.title}" loading="lazy" onclick="openModal('${item.url}', '${item.title}')">
-          <div class="card-info">
-            <p title="${item.title}">${item.title}</p>
-            <a href="${item.url}" download="meme.gif" class="download-btn" target="_blank">📥 Júklew</a>
+          <div class="card-title" title="${item.title}">${item.title}</div>
+          <div class="card-actions">
+            <a href="${item.url}" download="meme.gif" class="action-btn btn-download" target="_blank">📥 Júklew</a>
+            <button class="action-btn btn-like" onclick="likeGif(this, ${index})">❤️ <span id="like-${index}">${item.likes}</span></button>
+          </div>
+          <div class="card-meta">
+            <span>📁 GIF (${item.size})</span>
+            <span>👁️ ${item.views}</span>
           </div>
         `;
         grid.appendChild(card);
       });
+    }
+
+    function likeGif(btn, index) {
+      const span = document.getElementById(`like-${index}`);
+      memeDatabase[index].likes++;
+      span.textContent = memeDatabase[index].likes;
+      btn.style.transform = 'scale(1.1)';
+      setTimeout(() => btn.style.transform = 'scale(1)', 200);
     }
 
     function openModal(url, title) {
@@ -147,7 +166,6 @@
       searchGifs();
     }
 
-    // Dáslepki júklew
     displayGifs(memeDatabase);
   </script>
 </body>
