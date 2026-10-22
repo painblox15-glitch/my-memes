@@ -20,9 +20,8 @@
     .tag { background: #334155; padding: 8px 16px; border-radius: 15px; font-size: 14px; cursor: pointer; transition: 0.2s; user-select: none; }
     .tag:hover { background: #38bdf8; color: #0f172a; font-weight: bold; }
     
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; max-width: 1300px; margin: 0 auto; }
     
-    /* AlphaCoders style card */
     .card { background: #1e293b; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.4); text-align: left; display: flex; flex-direction: column; }
     .card img { width: 100%; height: 210px; object-fit: cover; background: #334155; cursor: pointer; }
     .card-title { padding: 12px 12px 5px 12px; font-size: 14px; font-weight: bold; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -33,7 +32,6 @@
     .btn-download:hover { background: #0369a1; }
     .btn-like { background: #9333ea; }
     .btn-like:hover { background: #7e22ce; }
-    .btn-likes-count { background: #10b981; pointer-events: none; }
 
     .card-meta { display: flex; justify-content: space-between; padding: 10px 12px; font-size: 12px; color: #94a3b8; }
 
@@ -52,10 +50,10 @@
   <div class="content-wrapper">
     <h1>🔥 TOP MEME GIFLAR</h1>
     <div class="author-badge">Made by Esnazarov. A</div>
-    <p>Eń zór, eń kúlkili hám eń ataqlı GIF memelar toplamı!</p>
+    <p>Eń zór, eń kúlkili hám eń ataqlı GIF memelar toplamı (50+ Memes)!</p>
 
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Meme qıdırıń (cat, dance, anime)..." onkeyup="if(event.key==='Enter') searchGifs()">
+      <input type="text" id="searchInput" placeholder="Meme qıdırıń (cat, dance, anime, funny)..." onkeyup="if(event.key==='Enter') searchGifs()">
       <button onclick="searchGifs()">Qıdırıw</button>
     </div>
 
@@ -63,6 +61,8 @@
       <span class="tag" onclick="quickSearch('')">🔥 Barlıǵı (Top)</span>
       <span class="tag" onclick="quickSearch('cat')">🐱 Pıshıqlar</span>
       <span class="tag" onclick="quickSearch('funny')">😂 Kúlkili</span>
+      <span class="tag" onclick="quickSearch('dance')">💃 Oyın</span>
+      <span class="tag" onclick="quickSearch('anime')">⚔️ Anime</span>
       <span class="tag" onclick="quickSearch('top')">⭐ Alfa / Top</span>
     </div>
 
@@ -88,17 +88,55 @@
   <script>
     const memeDatabase = [
       { title: "Nyan Cat Rainbow", category: "cat", url: "https://media1.giphy.com/media/sIIhZliB2McAo/giphy.gif", size: "400x300", views: "6,412", likes: 45 },
-      { title: "Cat Vibe Dance", category: "cat", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif", size: "400x300", views: "8,920", likes: 89 },
+      { title: "Cat Vibe Dance", category: "cat dance", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif", size: "400x300", views: "8,920", likes: 89 },
       { title: "GigaChad Alpha", category: "top", url: "https://media1.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif", size: "350x350", views: "15,430", likes: 320 },
       { title: "Leonardo DiCaprio Cheers", category: "top", url: "https://media1.giphy.com/media/g9582DNuQppxC/giphy.gif", size: "400x250", views: "5,110", likes: 64 },
       { title: "Homer Simpson Bush", category: "funny", url: "https://media1.giphy.com/media/jUwpNzg9IcyrK/giphy.gif", size: "400x300", views: "7,830", likes: 95 },
       { title: "Confused Travolta", category: "funny", url: "https://media1.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif", size: "450x300", views: "4,210", likes: 38 },
       { title: "Funny Baby Laugh", category: "funny", url: "https://media1.giphy.com/media/10JhviFuU2g3Qs/giphy.gif", size: "400x300", views: "9,650", likes: 142 },
-      { title: "Cat Jamming", category: "cat", url: "https://media1.giphy.com/media/vFKqnCdLPNOKc/giphy.gif", size: "400x300", views: "3,940", likes: 51 },
+      { title: "Cat Jamming", category: "cat dance", url: "https://media1.giphy.com/media/vFKqnCdLPNOKc/giphy.gif", size: "400x300", views: "3,940", likes: 51 },
       { title: "Minions Laughing", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif", size: "400x300", views: "11,200", likes: 210 },
       { title: "Elmo Fire Meme", category: "funny", url: "https://media1.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif", size: "400x300", views: "14,890", likes: 295 },
       { title: "SpongeBob Mocking", category: "funny", url: "https://media1.giphy.com/media/3oKIP8kNuTJJL3zT0I/giphy.gif", size: "400x300", views: "6,740", likes: 77 },
-      { title: "The Office No", category: "funny", url: "https://media1.giphy.com/media/12XMGIW6HBl5eM/giphy.gif", size: "400x300", views: "8,310", likes: 112 }
+      { title: "The Office No", category: "funny", url: "https://media1.giphy.com/media/12XMGIW6HBl5eM/giphy.gif", size: "400x300", views: "8,310", likes: 112 },
+      { title: "Pop Cat Meme", category: "cat", url: "https://media1.giphy.com/media/oXpZ1sLJUJytq/giphy.gif", size: "400x300", views: "9,120", likes: 134 },
+      { title: "Doge Happy Smile", category: "dog", url: "https://media1.giphy.com/media/o35X61RCMw24/giphy.gif", size: "400x300", views: "12,400", likes: 180 },
+      { title: "Pedro Raccoon Dance", category: "dance", url: "https://media1.giphy.com/media/ZX6NHzA96ddmT7wOib/giphy.gif", size: "400x300", views: "18,200", likes: 410 },
+      { title: "Chill Guy Meme", category: "top", url: "https://media1.giphy.com/media/A38Ymg50zu5M9SZYzo/giphy.gif", size: "400x300", views: "22,500", likes: 530 },
+      { title: "Spiderman Dance", category: "dance", url: "https://media1.giphy.com/media/b3A0yO74M8O0U/giphy.gif", size: "400x300", views: "7,430", likes: 88 },
+      { title: "Gojo Satoru Anime", category: "anime", url: "https://media1.giphy.com/media/C21GGDOpKT6Z4VuXyn/giphy.gif", size: "400x300", views: "16,100", likes: 275 },
+      { title: "Sukuna Jujutsu Kaisen", category: "anime", url: "https://media3.giphy.com/media/sSsp66O0TVEAAAAC/sukuna-jujutsu-kaisen.gif", size: "400x300", views: "13,800", likes: 198 },
+      { title: "Anime Dance Vibing", category: "anime dance", url: "https://media1.giphy.com/media/131tYQapOdbN3G/giphy.gif", size: "400x300", views: "8,450", likes: 115 },
+      { title: "Bugs Bunny No", category: "funny", url: "https://media1.giphy.com/media/9HonMN5DXDT6uVDSfa/giphy.gif", size: "400x300", views: "6,210", likes: 72 },
+      { title: "Drake Yes No", category: "funny", url: "https://media1.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif", size: "400x300", views: "25,100", likes: 490 },
+      { title: "Disaster Girl", category: "top", url: "https://media1.giphy.com/media/5wFS6d1PI6nzhcYZR0/giphy.gif", size: "400x300", views: "9,340", likes: 140 },
+      { title: "Success Kid", category: "top", url: "https://media1.giphy.com/media/Is1O1TWV0LEJi/giphy.gif", size: "400x300", views: "7,120", likes: 93 },
+      { title: "Keyboard Cat", category: "cat", url: "https://media1.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif", size: "400x300", views: "11,800", likes: 165 },
+      { title: "Grumpy Cat", category: "cat", url: "https://media1.giphy.com/media/X1xwVs9rB2s4w/giphy.gif", size: "400x300", views: "14,300", likes: 230 },
+      { title: "Rick Roll Dance", category: "dance", url: "https://media1.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif", size: "400x300", views: "19,400", likes: 355 },
+      { title: "Pikachu Shocked", category: "anime", url: "https://media1.giphy.com/media/6uGhT1O4sxpi8/giphy.gif", size: "400x300", views: "21,000", likes: 480 },
+      { title: "Cat Eating Popcorn", category: "cat", url: "https://media1.giphy.com/media/u0nPjRAtH6cLu/giphy.gif", size: "400x300", views: "8,650", likes: 104 },
+      { title: "Laughing Cow / Animals", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif", size: "400x300", views: "5,400", likes: 61 },
+      { title: "Smart Meme Guy", category: "top", url: "https://media1.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif", size: "400x300", views: "10,200", likes: 155 },
+      { title: "Winking Guy", category: "top", url: "https://media1.giphy.com/media/10osILvZ4ez7ws/giphy.gif", size: "400x300", views: "4,900", likes: 45 },
+      { title: "Thinking Face Meme", category: "funny", url: "https://media1.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif", size: "400x300", views: "7,900", likes: 88 },
+      { title: "Clapping Citizen Kane", category: "top", url: "https://media1.giphy.com/media/cF7QqO5DYdft6/giphy.gif", size: "400x300", views: "8,150", likes: 99 },
+      { title: "Salt Bae Chef", category: "top", url: "https://media1.giphy.com/media/3o7TKT7YPvExJtYbtS/giphy.gif", size: "400x300", views: "17,300", likes: 310 },
+      { title: "Surprised Cat", category: "cat", url: "https://media1.giphy.com/media/5VKbvrjxpUJCM/giphy.gif", size: "400x300", views: "9,800", likes: 120 },
+      { title: "Epic Sax Guy", category: "dance", url: "https://media1.giphy.com/media/gzW6x6Ld38W2Y/giphy.gif", size: "400x300", views: "12,900", likes: 215 },
+      { title: "Crying Cat Meme", category: "cat", url: "https://media1.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif", size: "400x300", views: "15,600", likes: 280 },
+      { title: "That's True Meme", category: "funny", url: "https://media1.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif", size: "400x300", views: "6,800", likes: 74 },
+      { title: "Facepalm Picard", category: "funny", url: "https://media1.giphy.com/media/hv53DaYcXWe3nRbR1A/giphy.gif", size: "400x300", views: "11,400", likes: 175 },
+      { title: "Mind Blown", category: "funny", url: "https://media1.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif", size: "400x300", views: "16,800", likes: 290 },
+      { title: "Popcorn Eating", category: "funny", url: "https://media1.giphy.com/media/N25HrT11Rz1WE/giphy.gif", size: "400x300", views: "13,200", likes: 225 },
+      { title: "Evil Mortimer / Laugh", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif", size: "400x300", views: "4,600", likes: 50 },
+      { title: "Aight Imma Head Out", category: "funny", url: "https://media1.giphy.com/media/Ru9sjtZ09XOEg/giphy.gif", size: "400x300", views: "20,100", likes: 440 },
+      { title: "Futurama Fry Eyes", category: "funny", url: "https://media1.giphy.com/media/5撈6b/giphy.gif", size: "400x300", views: "8,900", likes: 110 },
+      { title: "Hide the Pain Harold", category: "top", url: "https://media1.giphy.com/media/ISOckXUyb1hCw/giphy.gif", size: "400x300", views: "28,400", likes: 620 },
+      { title: "This Is Fine Dog", category: "top", url: "https://media1.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif", size: "400x300", views: "24,100", likes: 510 },
+      { title: "Borat Very Nice", category: "funny", url: "https://media1.giphy.com/media/l0HTYs3Z8k9lFvE3S/giphy.gif", size: "400x300", views: "10,500", likes: 160 },
+      { title: "Macho Dance", category: "dance", url: "https://media1.giphy.com/media/b3A0yO74M8O0U/giphy.gif", size: "400x300", views: "7,200", likes: 85 },
+      { title: "Cool Cat Style", category: "cat", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif", size: "400x300", views: "9,900", likes: 130 }
     ];
 
     function displayGifs(gifs) {
