@@ -9,7 +9,7 @@
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; text-align: center; display: flex; flex-direction: column; min-height: 100vh; }
     .content-wrapper { flex: 1; }
     h1 { color: #38bdf8; margin-bottom: 5px; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .author-badge { font-size: 1rem; color: #f59e0b; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px; }
+    .author-badge { font-size: 1.1rem; color: #f59e0b; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px; }
     p { color: #94a3b8; margin-bottom: 20px; }
     .search-box { display: flex; justify-content: center; gap: 10px; max-width: 600px; margin: 0 auto 25px auto; }
     input { flex: 1; padding: 12px 18px; border-radius: 25px; border: 2px solid #334155; background: #1e293b; color: #fff; font-size: 16px; outline: none; }
@@ -35,21 +35,19 @@
     <p>Eń zór, eń kúlkili hám eń ataqlı GIF memelar toplamı!</p>
 
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Meme qıdırıń (cat, dance, anime)...">
+      <input type="text" id="searchInput" placeholder="Meme qıdırıń (cat, dance, anime)..." onkeyup="if(event.key==='Enter') searchGifs()">
       <button onclick="searchGifs()">Qıdırıw</button>
     </div>
 
     <div class="tags">
-      <span class="tag" onclick="quickSearch('meme')">🔥 Top Memes</span>
-      <span class="tag" onclick="quickSearch('cat meme')">🐱 Pıshıqlar</span>
+      <span class="tag" onclick="quickSearch('')">🔥 Barlıǵı (Top)</span>
+      <span class="tag" onclick="quickSearch('cat')">🐱 Pıshıqlar</span>
       <span class="tag" onclick="quickSearch('anime')">⚔️ Anime</span>
-      <span class="tag" onclick="quickSearch('gaming')">🎮 Oynaw</span>
-      <span class="tag" onclick="quickSearch('funny')">😂 Kúlkili</span>
+      <span class="tag" onclick="quickSearch('dance')">💃 Oyın</span>
+      <span class="tag" onclick="quickSearch('dog')">🐶 Iytler</span>
     </div>
 
-    <div class="grid" id="gifGrid">
-      <p style="grid-column: 1/-1; color: #94a3b8;">Júklenbekte...</p>
-    </div>
+    <div class="grid" id="gifGrid"></div>
   </div>
 
   <footer>
@@ -57,44 +55,61 @@
   </footer>
 
   <script>
-    async function loadGifs(query = 'meme') {
+    // Kafolatlangan va doimiy ishlaydigan GIF-lar bazasi
+    const memeDatabase = [
+      { title: "Pop Cat Meme", category: "cat", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3p4ZXB4dXJyZnR5YnJ2ZW13a3pnd2psZjIwbWV4aDN4bmt5N3d3dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/oXpZ1sLJUJytq/giphy.gif" },
+      { title: "Nyan Cat", category: "cat", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDV2enBsdGpxaXZvNGIzaHZ4cnR4cXZ5cHBhczJpdWVjcnEwdGNydSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/sIIhZliB2McAo/giphy.gif" },
+      { title: "Cat Vibe Dance", category: "cat dance", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWk2YmxuNDBzeXRqNmEwMzRxeTFzN3dmdThyaGR6a241dXUxeHF1ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GeimqsH0TLDt4tScGw/giphy.gif" },
+      { title: "Gojo Sukuna Anime Meme", category: "anime", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWZsdDFqNm5pOXNpdnV2dnE1ZWtsMGY4MXA1MnBzNXZkOW4yaG15byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C21GGDOpKT6Z4VuXyn/giphy.gif" },
+      { title: "Anime Dance Meme", category: "anime dance", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmtpODJseXFiOWdpZmV2aXp0MGx2MnN0MnBkb3V1NzNhMXJvZWdrciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/131tYQapOdbN3G/giphy.gif" },
+      { title: "Doge Meme Dog", category: "dog", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdW5vNmQ0YmY0bmcyNWl3eXNodGNiaXQyMXV5YnA0b3gxaDJ4OXFzMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/o35X61RCMw24/giphy.gif" },
+      { title: "Funny Dog Smile", category: "dog", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTBmOWQ4NHFkMGF6eGExcmZ0YjFwaGk4OHMxcHBneHowY3R4NDJ1biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mCRJDo24UvJMA/giphy.gif" },
+      { title: "Spiderman Dance Meme", category: "dance", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eHNtdXRhNGRkOW5hYXdrZmdqYWc2NXJsaWNkYndyYmg0dXU1MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/b3A0yO74M8O0U/giphy.gif" },
+      { title: "GigaChad Meme", category: "top meme", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHUxb244aXdkdXJjcTljYjdicmd2YWNneGtnenpycnZlMmVxOW9sMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CAYVZA5NRb529kKQUc/giphy.gif" },
+      { title: "Pedro Raccoon Dance", category: "dance", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDM2cnlzNDc0bHNsaHBrNTlsZmx0NWQ5dXlxbGllNGhhMzBtbndjbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PedroRaccoon/giphy.gif" },
+      { title: "Chill Guy Meme", category: "top meme", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3YxaTFycGNmdHkyYXpkeXp5Njd3ZW1udjV3dnVtdmE5ZWtrNmZsaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/A38Ymg50zu5M9SZYzo/giphy.gif" },
+      { title: "Leonardo DiCaprio Cheer", category: "top meme", url: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnlzaTFod2Fza2QxYzlsbmJiaTJjZ2hhZzFnZHdzczdrNzBkdGttYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/g9582DNuQppxC/giphy.gif" }
+    ];
+
+    function displayGifs(gifs) {
       const grid = document.getElementById('gifGrid');
-      grid.innerHTML = '<p style="grid-column: 1/-1; color: #94a3b8;">GIF-lar júklenbekte...</p>';
-      
-      try {
-        const res = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=g543uY6cFAh89B0c07vA78N7784L5U5g&q=${encodeURIComponent(query)}&limit=24`);
-        const data = await res.json();
-        
-        grid.innerHTML = '';
-        if (data.data && data.data.length > 0) {
-          data.data.forEach(item => {
-            const imgUrl = item.images.fixed_height.url;
-            const title = item.title || query;
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `<img src="${imgUrl}" alt="${title}" loading="lazy"><p>${title}</p>`;
-            grid.appendChild(card);
-          });
-        } else {
-          grid.innerHTML = '<p style="grid-column: 1/-1;">Hesh nárse tabılmadı!</p>';
-        }
-      } catch (err) {
-        grid.innerHTML = '<p style="grid-column: 1/-1; color: #ef4444;">Júklewde qatelik boldı. İnternetti tekseriń!</p>';
+      grid.innerHTML = '';
+
+      if (gifs.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; color: #94a3b8; font-size: 18px;">Hesh nárse tabılmadı!</p>';
+        return;
       }
+
+      gifs.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${item.url}" alt="${item.title}" loading="lazy">
+          <p>${item.title}</p>
+        `;
+        grid.appendChild(card);
+      });
     }
 
     function searchGifs() {
-      const val = document.getElementById('searchInput').value;
-      if (val) loadGifs(val);
+      const val = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!val) {
+        displayGifs(memeDatabase);
+        return;
+      }
+      const filtered = memeDatabase.filter(gif => 
+        gif.title.toLowerCase().includes(val) || gif.category.toLowerCase().includes(val)
+      );
+      displayGifs(filtered);
     }
 
     function quickSearch(tag) {
       document.getElementById('searchInput').value = tag;
-      loadGifs(tag);
+      searchGifs();
     }
 
     // Dáslepki júklew
-    loadGifs('meme');
+    displayGifs(memeDatabase);
   </script>
 </body>
 </html>
