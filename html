@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Mini Roblox Studio - 3D Level Editor</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  body { overflow: hidden; background: #1a1a2e; }
+  #canvas-container { width: 100vw; height: 100vh; display: block; }
+  
+  #ui-panel {
+    position: absolute; top: 15px; left: 15px; background: rgba(20, 25, 35, 0.9);
+    border: 2px solid #3a475c; border-radius: 12px; padding: 15px; color: white; width: 260px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5); pointer-events: auto;
+  }
+  h2 { font-size: 18px; color: #f1c40f; margin-bottom: 10px; text-align: center; }
+  .tool-btn {
+    background: #3498db; border: 2px solid #fff; border-radius: 8px; color: white;
+    padding: 8px 12px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 8px;
+    text-align: left; font-size: 13px; box-shadow: 0 3px 0 #2980b9;
+  }
+  .tool-btn:hover { background: #2980b9; }
+  .tool-btn.active { background: #2ecc71; box-shadow: 0 3px 0 #27ae60; }
+  
+  .block-selector { display: flex; gap: 5px; margin-bottom: 10px; }
+  .block-opt {
+    flex: 1; height: 35px; border: 2px solid #fff; border-radius: 6px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .block-opt.selected { border-color: #f1c40f; transform: scale(1.05); }
+
+  #instructions {
+    position: absolute; bottom: 15px; left: 15px; background: rgba(0,0,0,0.8);
+    color: #fff; padding: 10px 15px; border-radius: 10px; font-size: 12px; line-height: 1.5;
+    border: 1px solid #555; pointer-events: none;
+  }
+
+  #watermark {
+    position: absolute; bottom: 15px; right: 20px; color: rgba(255,255,255,0.8);
+    font-size: 14px; font-weight: bold; background: rgba(0,0,0,0.5);
+    padding: 6px 14px; border-radius: 8px; border: 1px solid #444;
+  }
+</style>
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<div id="ui-panel">
+  <h2>🛠️ MINI STUDIO</h2>
+  <div style="font-size: 13px; margin-bottom: 6px; font-weight: bold;">Blok Turini Tanlang:</div>
+  <div class="block-selector">
+    <div class="block-opt selected" style="background:#55efc4;" onclick="setMaterial(0)" title="Maysazor">🟩</div>
+    <div class="block-opt" style="background:#d63031;" onclick="setMaterial(1)" title="Qizil Blok">🟥</div>
+    <div class="block-opt" style="background:#f1c40f;" onclick="setMaterial(2)" title="Oltin Blok">🟨</div>
+    <div class="block-opt" style="background:#0984e3;" onclick="setMaterial(3)" title="Ko'k Blok">🟦</div>
+  </div>
+  
+  <button class="tool-btn active" id="mode-build" onclick="setMode('build')">🧱 Blok Qo'yish</button>
+  <button class="tool-btn" id="mode-delete" onclick="setMode('delete')">❌ Blokni O'chirish</button>
+  <button class="tool-btn" style="background:#e74c3c;" onclick="clearAll()">🗑️ Xaritani Tozalash</button>
+</div>
+
+<div id="instructions">
+  <b>Boshqaruv:</b><br>
+  • <b>W, A, S, D / Strekalar</b> — Kamerani harakatlantirish<br>
+  • <b>Sichqoncha Chap Tugmasi</b> — Blok qo'yish yoki o'chirish<br>
+  • <b>Sichqoncha O'ng Tugmasi + Surish</b> — Kamerani aylantirish
+</div>
+
+<div id="watermark">Made by Esnazarov. A</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+let currentMaterialIndex = 0;
+let currentMode = 'build'; // 'build' yoki 'delete'
+
+const materials = [
+  new THREE.MeshLambertMaterial({ color: 0x55efc4 }),
+  new THREE.MeshLambertMaterial({ color: 0xd63031 }),
+  new THREE.MeshLambertMaterial({ color: 0xf1c40f }),
+  new THREE.MeshLambertMaterial({ color: 0x0984e3 })
+];
+
+function setMaterial(idx) {
+  currentMaterialIndex = idx;
+  document.querySelectorAll('.block-opt').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('mode-build').classList.toggle('active', mode === 'build');
+  document.getElementById('mode-delete').classList.toggle('active', mode === 'delete');
+}
+
+// --- THREE.JS SAHNA ---
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x2d3436);
+scene.fog = new THREE.Fog(0x2d3436, 40, 120);
+
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 15, 20);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+dirLight.position.set(20, 40, 20);
+dirLight.castShadow = true;
+scene.add(dirLight);
+
+// Yer plitasi
+const planeGeo = new THREE.PlaneGeometry(60, 60);
+const planeMat = new THREE.MeshLambertMaterial({ color: 0x636e72 });
+const plane = new THREE.Mesh(planeGeo, planeMat);
+plane.rotation.x = -Math.PI / 2;
+plane.receiveShadow = true;
+scene.add(plane);
+
+const grid = new THREE.GridHelper(60, 30, 0xffffff, 0x555555);
+grid.position.y = 0.01;
+scene.add(grid);
+
+const objects = [];
+// Boshlang'ich platforma
+const boxGeo = new THREE.BoxGeometry(2, 2, 2);
+function spawnBlock(x, y, z, matIdx) {
+  const mesh = new THREE.Mesh(boxGeo, materials[matIdx]);
+  mesh.position.set(x, y, z);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  scene.add(mesh);
+  objects.push(mesh);
+  return mesh;
+}
+
+// O'rtaga bitta baza bloki
+spawnBlock(0, 1, 0, 0);
+
+function clearAll() {
+  objects.forEach(obj => scene.remove(obj));
+  objects.length = 0;
+  spawnBlock(0, 1, 0, 0);
+}
+
+// Raycaster (Blok qo'yish va o'chirish uchun)
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+window.addEventListener('click', e => {
+  if (e.clientX > 300 || e.clientY < window.innerHeight - 180) { // UI qismiga tegmasligi uchun
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects([...objects, plane]);
+
+    if (intersects.length > 0) {
+      const intersect = intersects[0];
+      if (currentMode === 'build') {
+        const normal = intersect.face.normal;
+        const position = intersect.object.position.clone().add(normal.clone().multiplyScalar(2));
+        // Gridga moslash
+        const x = Math.round(position.x / 2) * 2;
+        const y = Math.max(1, Math.round(position.y / 2) * 2);
+        const z = Math.round(position.z / 2) * 2;
+        spawnBlock(x, y, z, currentMaterialIndex);
+      } else if (currentMode === 'delete' && intersect.object !== plane) {
+        scene.remove(intersect.object);
+        const idx = objects.indexOf(intersect.object);
+        if (idx > -1) objects.splice(idx, 1);
+      }
+    }
+  }
+});
+
+// Kamera harakati (WASD + O'ng sichqoncha aylanishi)
+let isDragging = false;
+let previousMousePosition = { x: 0, y: 0 };
+let cameraAngleX = 0, cameraAngleY = 0.6;
+let cameraRadius = 25;
+let cameraTarget = new THREE.Vector3(0, 0, 0);
+
+window.addEventListener('mousedown', e => {
+  if (e.button === 2) { isDragging = true; }
+});
+window.addEventListener('mouseup', e => {
+  if (e.button === 2) { isDragging = false; }
+});
+window.addEventListener('contextmenu', e => e.preventDefault());
+
+window.addEventListener('mousemove', e => {
+  if (isDragging) {
+    const deltaX = e.clientX - previousMousePosition.x;
+    const deltaY = e.clientY - previousMousePosition.y;
+    cameraAngleX -= deltaX * 0.008;
+    cameraAngleY = Math.max(0.1, Math.min(1.5, cameraAngleY - deltaY * 0.008));
+  }
+  previousMousePosition = { x: e.clientX, y: e.clientY };
+});
+
+const keys = {};
+window.addEventListener('keydown', e => keys[e.code] = true);
+window.addEventListener('keyup', e => keys[e.code] = false);
+
+function updateCamera() {
+  const speed = 0.4;
+  if (keys['KeyW'] || keys['ArrowUp']) cameraTarget.z -= speed * Math.cos(cameraAngleX);
+  if (keys['KeyS'] || keys['ArrowDown']) cameraTarget.z += speed * Math.cos(cameraAngleX);
+  if (keys['KeyA'] || keys['ArrowLeft']) cameraTarget.x -= speed * Math.sin(cameraAngleX);
+  if (keys['KeyD'] || keys['ArrowRight']) cameraTarget.x += speed * Math.sin(cameraAngleX);
+
+  camera.position.x = cameraTarget.x + cameraRadius * Math.sin(cameraAngleY) * Math.sin(cameraAngleX);
+  camera.position.y = cameraTarget.y + cameraRadius * Math.cos(cameraAngleY);
+  camera.position.z = cameraTarget.z + cameraRadius * Math.sin(cameraAngleY) * Math.cos(cameraAngleX);
+  camera.lookAt(cameraTarget);
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  updateCamera();
+  renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+animate();
+</script>
+</body>
+</html>
