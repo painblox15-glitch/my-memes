@@ -1,210 +1,1290 @@
 <!DOCTYPE html>
-<html lang="kaa">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Top Qaraqalpaqsha Meme GIF Platforması</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; text-align: center; display: flex; flex-direction: column; min-height: 100vh; }
-    .content-wrapper { flex: 1; }
-    h1 { color: #38bdf8; margin-bottom: 5px; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .author-badge { font-size: 1.1rem; color: #f59e0b; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px; }
-    p { color: #94a3b8; margin-bottom: 20px; }
-    .search-box { display: flex; justify-content: center; gap: 10px; max-width: 600px; margin: 0 auto 25px auto; }
-    input { flex: 1; padding: 12px 18px; border-radius: 25px; border: 2px solid #334155; background: #1e293b; color: #fff; font-size: 16px; outline: none; }
-    input:focus { border-color: #38bdf8; }
-    button { padding: 12px 25px; border-radius: 25px; border: none; background: #0284c7; color: #fff; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    button:hover { background: #0369a1; }
-    .tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
-    .tag { background: #334155; padding: 8px 16px; border-radius: 15px; font-size: 14px; cursor: pointer; transition: 0.2s; user-select: none; }
-    .tag:hover { background: #38bdf8; color: #0f172a; font-weight: bold; }
-    
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; max-width: 1300px; margin: 0 auto; }
-    
-    .card { background: #1e293b; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.4); text-align: left; display: flex; flex-direction: column; }
-    .card img { width: 100%; height: 210px; object-fit: cover; background: #334155; cursor: pointer; }
-    .card-title { padding: 12px 12px 5px 12px; font-size: 14px; font-weight: bold; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    
-    .card-actions { display: flex; padding: 10px 12px; gap: 6px; justify-content: space-between; border-bottom: 1px solid #334155; }
-    .action-btn { flex: 1; padding: 8px 0; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; color: white; transition: 0.2s; }
-    .btn-download { background: #0284c7; text-decoration: none; }
-    .btn-download:hover { background: #0369a1; }
-    .btn-like { background: #9333ea; }
-    .btn-like:hover { background: #7e22ce; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Buy Robux - Roblox</title>
 
-    .card-meta { display: flex; justify-content: space-between; padding: 10px 12px; font-size: 12px; color: #94a3b8; }
-
-    /* Fullscreen Modal */
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); align-items: center; justify-content: center; flex-direction: column; }
-    .modal img { max-width: 90%; max-height: 70vh; border-radius: 12px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
-    .modal-content { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-    .close-btn { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; background: none; border: none; }
-    .close-btn:hover { color: #38bdf8; }
-
-    footer { margin-top: 40px; padding: 20px; border-top: 1px solid #334155; color: #38bdf8; font-size: 15px; font-weight: 600; }
-  </style>
-</head>
-<body>
-
-  <div class="content-wrapper">
-    <h1>🔥 TOP MEME GIFLAR</h1>
-    <div class="author-badge">Made by Esnazarov. A</div>
-    <p>Eń zór, eń kúlkili hám eń ataqlı GIF memelar toplamı (50+ Memes)!</p>
-
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Meme qıdırıń (cat, dance, anime, funny)..." onkeyup="if(event.key==='Enter') searchGifs()">
-      <button onclick="searchGifs()">Qıdırıw</button>
-    </div>
-
-    <div class="tags">
-      <span class="tag" onclick="quickSearch('')">🔥 Barlıǵı (Top)</span>
-      <span class="tag" onclick="quickSearch('cat')">🐱 Pıshıqlar</span>
-      <span class="tag" onclick="quickSearch('funny')">😂 Kúlkili</span>
-      <span class="tag" onclick="quickSearch('dance')">💃 Oyın</span>
-      <span class="tag" onclick="quickSearch('anime')">⚔️ Anime</span>
-      <span class="tag" onclick="quickSearch('top')">⭐ Alfa / Top</span>
-    </div>
-
-    <div class="grid" id="gifGrid">
-      <p style="grid-column: 1/-1; color: #94a3b8;">GIF-lar júklenbekte...</p>
-    </div>
-  </div>
-
-  <!-- Fullscreen Modal -->
-  <div id="gifModal" class="modal">
-    <button class="close-btn" onclick="closeModal()">&times;</button>
-    <div class="modal-content">
-      <img id="modalImg" src="" alt="">
-      <p id="modalText" style="color:#fff; font-size:18px;"></p>
-      <a id="modalDownload" href="" class="action-btn btn-download" download="meme.gif" target="_blank" style="padding: 10px 20px;">📥 Júklep alıw (Download)</a>
-    </div>
-  </div>
-
-  <footer>
-    Made by Esnazarov. A
-  </footer>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script>
-    const memeDatabase = [
-      { title: "Nyan Cat Rainbow", category: "cat", url: "https://media1.giphy.com/media/sIIhZliB2McAo/giphy.gif", size: "400x300", views: "6,412", likes: 45 },
-      { title: "Cat Vibe Dance", category: "cat dance", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif", size: "400x300", views: "8,920", likes: 89 },
-      { title: "GigaChad Alpha", category: "top", url: "https://media1.giphy.com/media/CAYVZA5NRb529kKQUc/giphy.gif", size: "350x350", views: "15,430", likes: 320 },
-      { title: "Leonardo DiCaprio Cheers", category: "top", url: "https://media1.giphy.com/media/g9582DNuQppxC/giphy.gif", size: "400x250", views: "5,110", likes: 64 },
-      { title: "Homer Simpson Bush", category: "funny", url: "https://media1.giphy.com/media/jUwpNzg9IcyrK/giphy.gif", size: "400x300", views: "7,830", likes: 95 },
-      { title: "Confused Travolta", category: "funny", url: "https://media1.giphy.com/media/uUTvp8kgfHem7AmGts/giphy.gif", size: "450x300", views: "4,210", likes: 38 },
-      { title: "Funny Baby Laugh", category: "funny", url: "https://media1.giphy.com/media/10JhviFuU2g3Qs/giphy.gif", size: "400x300", views: "9,650", likes: 142 },
-      { title: "Cat Jamming", category: "cat dance", url: "https://media1.giphy.com/media/vFKqnCdLPNOKc/giphy.gif", size: "400x300", views: "3,940", likes: 51 },
-      { title: "Minions Laughing", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif", size: "400x300", views: "11,200", likes: 210 },
-      { title: "Elmo Fire Meme", category: "funny", url: "https://media1.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif", size: "400x300", views: "14,890", likes: 295 },
-      { title: "SpongeBob Mocking", category: "funny", url: "https://media1.giphy.com/media/3oKIP8kNuTJJL3zT0I/giphy.gif", size: "400x300", views: "6,740", likes: 77 },
-      { title: "The Office No", category: "funny", url: "https://media1.giphy.com/media/12XMGIW6HBl5eM/giphy.gif", size: "400x300", views: "8,310", likes: 112 },
-      { title: "Pop Cat Meme", category: "cat", url: "https://media1.giphy.com/media/oXpZ1sLJUJytq/giphy.gif", size: "400x300", views: "9,120", likes: 134 },
-      { title: "Doge Happy Smile", category: "dog", url: "https://media1.giphy.com/media/o35X61RCMw24/giphy.gif", size: "400x300", views: "12,400", likes: 180 },
-      { title: "Pedro Raccoon Dance", category: "dance", url: "https://media1.giphy.com/media/ZX6NHzA96ddmT7wOib/giphy.gif", size: "400x300", views: "18,200", likes: 410 },
-      { title: "Chill Guy Meme", category: "top", url: "https://media1.giphy.com/media/A38Ymg50zu5M9SZYzo/giphy.gif", size: "400x300", views: "22,500", likes: 530 },
-      { title: "Spiderman Dance", category: "dance", url: "https://media1.giphy.com/media/b3A0yO74M8O0U/giphy.gif", size: "400x300", views: "7,430", likes: 88 },
-      { title: "Gojo Satoru Anime", category: "anime", url: "https://media1.giphy.com/media/C21GGDOpKT6Z4VuXyn/giphy.gif", size: "400x300", views: "16,100", likes: 275 },
-      { title: "Sukuna Jujutsu Kaisen", category: "anime", url: "https://media3.giphy.com/media/sSsp66O0TVEAAAAC/sukuna-jujutsu-kaisen.gif", size: "400x300", views: "13,800", likes: 198 },
-      { title: "Anime Dance Vibing", category: "anime dance", url: "https://media1.giphy.com/media/131tYQapOdbN3G/giphy.gif", size: "400x300", views: "8,450", likes: 115 },
-      { title: "Bugs Bunny No", category: "funny", url: "https://media1.giphy.com/media/9HonMN5DXDT6uVDSfa/giphy.gif", size: "400x300", views: "6,210", likes: 72 },
-      { title: "Drake Yes No", category: "funny", url: "https://media1.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif", size: "400x300", views: "25,100", likes: 490 },
-      { title: "Disaster Girl", category: "top", url: "https://media1.giphy.com/media/5wFS6d1PI6nzhcYZR0/giphy.gif", size: "400x300", views: "9,340", likes: 140 },
-      { title: "Success Kid", category: "top", url: "https://media1.giphy.com/media/Is1O1TWV0LEJi/giphy.gif", size: "400x300", views: "7,120", likes: 93 },
-      { title: "Keyboard Cat", category: "cat", url: "https://media1.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif", size: "400x300", views: "11,800", likes: 165 },
-      { title: "Grumpy Cat", category: "cat", url: "https://media1.giphy.com/media/X1xwVs9rB2s4w/giphy.gif", size: "400x300", views: "14,300", likes: 230 },
-      { title: "Rick Roll Dance", category: "dance", url: "https://media1.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif", size: "400x300", views: "19,400", likes: 355 },
-      { title: "Pikachu Shocked", category: "anime", url: "https://media1.giphy.com/media/6uGhT1O4sxpi8/giphy.gif", size: "400x300", views: "21,000", likes: 480 },
-      { title: "Cat Eating Popcorn", category: "cat", url: "https://media1.giphy.com/media/u0nPjRAtH6cLu/giphy.gif", size: "400x300", views: "8,650", likes: 104 },
-      { title: "Laughing Cow / Animals", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif", size: "400x300", views: "5,400", likes: 61 },
-      { title: "Smart Meme Guy", category: "top", url: "https://media1.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif", size: "400x300", views: "10,200", likes: 155 },
-      { title: "Winking Guy", category: "top", url: "https://media1.giphy.com/media/10osILvZ4ez7ws/giphy.gif", size: "400x300", views: "4,900", likes: 45 },
-      { title: "Thinking Face Meme", category: "funny", url: "https://media1.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif", size: "400x300", views: "7,900", likes: 88 },
-      { title: "Clapping Citizen Kane", category: "top", url: "https://media1.giphy.com/media/cF7QqO5DYdft6/giphy.gif", size: "400x300", views: "8,150", likes: 99 },
-      { title: "Salt Bae Chef", category: "top", url: "https://media1.giphy.com/media/3o7TKT7YPvExJtYbtS/giphy.gif", size: "400x300", views: "17,300", likes: 310 },
-      { title: "Surprised Cat", category: "cat", url: "https://media1.giphy.com/media/5VKbvrjxpUJCM/giphy.gif", size: "400x300", views: "9,800", likes: 120 },
-      { title: "Epic Sax Guy", category: "dance", url: "https://media1.giphy.com/media/gzW6x6Ld38W2Y/giphy.gif", size: "400x300", views: "12,900", likes: 215 },
-      { title: "Crying Cat Meme", category: "cat", url: "https://media1.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif", size: "400x300", views: "15,600", likes: 280 },
-      { title: "That's True Meme", category: "funny", url: "https://media1.giphy.com/media/d2W7eZX5z62ziqdi/giphy.gif", size: "400x300", views: "6,800", likes: 74 },
-      { title: "Facepalm Picard", category: "funny", url: "https://media1.giphy.com/media/hv53DaYcXWe3nRbR1A/giphy.gif", size: "400x300", views: "11,400", likes: 175 },
-      { title: "Mind Blown", category: "funny", url: "https://media1.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif", size: "400x300", views: "16,800", likes: 290 },
-      { title: "Popcorn Eating", category: "funny", url: "https://media1.giphy.com/media/N25HrT11Rz1WE/giphy.gif", size: "400x300", views: "13,200", likes: 225 },
-      { title: "Evil Mortimer / Laugh", category: "funny", url: "https://media1.giphy.com/media/13CoXDiaCcCoyk/giphy.gif", size: "400x300", views: "4,600", likes: 50 },
-      { title: "Aight Imma Head Out", category: "funny", url: "https://media1.giphy.com/media/Ru9sjtZ09XOEg/giphy.gif", size: "400x300", views: "20,100", likes: 440 },
-      { title: "Futurama Fry Eyes", category: "funny", url: "https://media1.giphy.com/media/5撈6b/giphy.gif", size: "400x300", views: "8,900", likes: 110 },
-      { title: "Hide the Pain Harold", category: "top", url: "https://media1.giphy.com/media/ISOckXUyb1hCw/giphy.gif", size: "400x300", views: "28,400", likes: 620 },
-      { title: "This Is Fine Dog", category: "top", url: "https://media1.giphy.com/media/QMHoU66sBXqqLqYvGO/giphy.gif", size: "400x300", views: "24,100", likes: 510 },
-      { title: "Borat Very Nice", category: "funny", url: "https://media1.giphy.com/media/l0HTYs3Z8k9lFvE3S/giphy.gif", size: "400x300", views: "10,500", likes: 160 },
-      { title: "Macho Dance", category: "dance", url: "https://media1.giphy.com/media/b3A0yO74M8O0U/giphy.gif", size: "400x300", views: "7,200", likes: 85 },
-      { title: "Cool Cat Style", category: "cat", url: "https://media1.giphy.com/media/GeimqsH0TLDt4tScGw/giphy.gif", size: "400x300", views: "9,900", likes: 130 }
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          colors: {
+            rbxBg: '#111216',
+            rbxCard: '#191B20',
+            rbxPill: '#23252C',
+            rbxPillHover: '#2C2F38',
+            rbxBorder: '#2A2D35',
+            rbxBlue: '#3574F2',
+            rbxBlueHover: '#2563EB',
+            rbxMuted: '#9BA1A6',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #090A0D;
+      color: #FFFFFF;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Hide number input arrows */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2E313A;
+      border-radius: 9999px;
+    }
+
+    /* Modal Slide Up Animation */
+    @keyframes sheetSlideUp {
+      from {
+        transform: translateY(100%);
+        opacity: 0.6;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    .animate-sheet-up {
+      animation: sheetSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Toast Slide Down Animation */
+    @keyframes toastDrop {
+      0% {
+        transform: translateY(-140%);
+        opacity: 0;
+      }
+      12% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      88% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-140%);
+        opacity: 0;
+      }
+    }
+    .animate-toast-drop {
+      animation: toastDrop 4.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Subtle green pulse on balance after sending */
+    @keyframes balancePulse {
+      0% { transform: scale(1); color: #00D184; }
+      50% { transform: scale(1.08); color: #34D399; }
+      100% { transform: scale(1); color: #FFFFFF; }
+    }
+    .animate-balance-pulse {
+      animation: balancePulse 0.65s ease-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex justify-center">
+
+  <!-- FULL-SCREEN ROBUX FIREWORKS / SALYUT CANVAS OVERLAY -->
+  <canvas id="robuxFireworksCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-[9999]"></canvas>
+
+  <!-- MOBILE APP VIEWPORT CONTAINER -->
+  <div id="appFrame" class="w-full max-w-[430px] min-h-screen bg-rbxBg border-x border-[#25272E] relative overflow-x-hidden flex flex-col">
+
+    <!-- TOP SUCCESS TOAST NOTIFICATION LAYER -->
+    <div id="toastWrapper" class="fixed top-3 left-1/2 -translate-x-1/2 w-full max-w-[410px] px-3 z-50 pointer-events-none flex flex-col items-center space-y-2"></div>
+
+    <!-- TOP HEADER BAR -->
+    <header class="sticky top-0 z-30 bg-rbxBg/95 backdrop-blur-md px-4 pt-3.5 pb-2.5 flex items-center justify-between">
+      <!-- Left: Close / Reset Button -->
+      <button onclick="resetSimulator()" title="Reset simulator" class="w-9 h-9 rounded-full flex items-center justify-center text-white/90 hover:bg-rbxPill active:scale-95 transition">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <!-- Center: Hexagonal Robux Icon + Editable Balance -->
+      <button onclick="openBalanceModal()" title="Tap to edit Robux balance" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full hover:bg-rbxPill/80 active:scale-95 transition">
+        <!-- Crisp Hexagonal Robux SVG -->
+        <svg class="w-5 h-5 text-white flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.75L20.88 6.88V17.12L12 22.25L3.12 17.12V6.88L12 1.75ZM12 3.85L4.95 7.92V16.08L12 20.15L19.05 16.08V7.92L12 3.85ZM9.25 9.25H14.75V14.75H9.25V9.25Z"/>
+        </svg>
+        <span id="headerBalance" class="font-bold text-[15px] tracking-tight text-white">495,000,000</span>
+      </button>
+
+      <!-- Right: [ ↑ Send ] Pill Button -->
+      <button onclick="openSendModal()" class="flex items-center space-x-1.5 bg-rbxPill hover:bg-rbxPillHover active:scale-95 border border-[#343741] text-white text-[13px] font-semibold px-3.5 py-1.5 rounded-full transition shadow-sm">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+        <span>Send</span>
+      </button>
+    </header>
+
+    <!-- MAIN SCROLLABLE CONTENT ("Buy Robux") -->
+    <main class="px-4 pb-10 pt-1 flex-1">
+
+      <!-- Main Title -->
+      <div class="flex items-center justify-between">
+        <h1 class="text-[28px] font-extrabold tracking-tight text-white leading-tight">Buy Robux</h1>
+        <div class="flex items-center space-x-1.5">
+          <!-- Optional Test Salyut Button -->
+          <button onclick="launchRobuxFireworks()" title="Test Robux Salyut" class="w-7 h-7 rounded-full bg-rbxPill/60 hover:bg-rbxPill text-amber-400 hover:text-amber-300 flex items-center justify-center transition text-xs">
+            ✨
+          </button>
+          <!-- Discreet Sound Toggle -->
+          <button onclick="toggleSound()" id="soundToggleBtn" title="Toggle UI Sounds" class="w-7 h-7 rounded-full bg-rbxPill/60 hover:bg-rbxPill text-rbxMuted hover:text-white flex items-center justify-center transition">
+            <svg id="soundOnIcon" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg id="soundOffIcon" class="w-3.5 h-3.5 hidden text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ROBUX PLUS SUBSCRIPTION CARD -->
+      <section class="mt-4 bg-rbxCard border border-rbxBorder rounded-2xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[16px] font-extrabold text-white">Roblox Plus</span>
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Active</span>
+            </div>
+            <p class="text-[12px] text-rbxMuted mt-0.5">Monthly Robux stipend &amp; exclusive creator perks</p>
+          </div>
+          <div class="text-right">
+            <div class="text-[14px] font-bold text-white">₱269.00</div>
+            <div class="text-[11px] text-rbxMuted">/ month</div>
+          </div>
+        </div>
+        <button type="button" onclick="openSendModal()" class="w-full bg-rbxPill hover:bg-rbxPillHover active:scale-[0.99] border border-[#343741] text-white text-[13px] font-semibold py-2 rounded-xl transition">
+          Send Gift Robux
+        </button>
+      </section>
+
+      <!-- ROBUX PACKAGES SECTION -->
+      <section class="mt-5">
+        <h2 class="text-[14px] font-bold text-rbxMuted uppercase tracking-wider mb-2.5">Robux packages</h2>
+        <div id="packagesList" class="space-y-2.5"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- BALANCE EDITOR MODAL -->
+  <div id="balanceModalBackdrop" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs hidden items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full max-w-[430px] bg-rbxCard border border-rbxBorder rounded-t-3xl sm:rounded-3xl p-5 space-y-4 animate-sheet-up">
+      <div class="flex items-center justify-between">
+        <h3 class="text-[17px] font-extrabold text-white">Edit Robux Balance</h3>
+        <button type="button" onclick="closeBalanceModal()" class="w-8 h-8 rounded-full bg-rbxPill text-rbxMuted hover:text-white flex items-center justify-center text-sm">
+          ✕
+        </button>
+      </div>
+      <p class="text-[12px] text-rbxMuted">Set a custom balance for your simulator session.</p>
+      <input
+        type="text"
+        id="balanceEditInput"
+        inputmode="numeric"
+        oninput="formatBalanceInput(this)"
+        class="w-full bg-rbxPill border border-[#343741] focus:border-rbxBlue rounded-xl px-3.5 py-3 text-[16px] font-bold text-white outline-none"
+      />
+      <div class="flex items-center space-x-2.5 pt-1">
+        <button type="button" onclick="saveBalanceEdit()" class="flex-1 bg-rbxBlue hover:bg-rbxBlueHover text-white font-bold text-[14px] py-3 rounded-xl transition">
+          Save
+        </button>
+        <button type="button" onclick="closeBalanceModal()" class="flex-1 bg-rbxPill hover:bg-rbxPillHover text-white font-semibold text-[14px] py-3 rounded-xl border border-[#343741] transition">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-STEP SEND ROBUX MODAL -->
+  <div id="sendModalBackdrop" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs hidden items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full max-w-[430px] h-[88vh] max-h-[760px] bg-rbxCard border border-rbxBorder rounded-t-3xl sm:rounded-3xl overflow-hidden flex flex-col animate-sheet-up">
+
+      <!-- STEP 1: SELECT RECIPIENT -->
+      <div id="step1View" class="flex flex-col h-full">
+        <div class="px-4 pt-4 pb-3 border-b border-rbxBorder flex items-center justify-between">
+          <h3 class="text-[17px] font-extrabold text-white">Send Robux</h3>
+          <button type="button" onclick="closeSendModal()" class="w-8 h-8 rounded-full bg-rbxPill text-rbxMuted hover:text-white flex items-center justify-center text-sm">
+            ✕
+          </button>
+        </div>
+
+        <div class="px-4 pt-3 pb-2">
+          <div class="relative flex items-center bg-rbxPill border border-[#343741] rounded-xl px-3 py-2">
+            <input
+              type="text"
+              id="searchUsernameInput"
+              placeholder="Search username..."
+              oninput="handleSearchInput(this.value)"
+              class="w-full bg-transparent text-[14px] text-white placeholder-rbxMuted outline-none pr-12"
+            />
+            <span id="searchSpinner" class="hidden text-[11px] text-rbxMuted mr-1.5">...</span>
+            <button type="button" id="clearSearchBtn" onclick="clearSearchField()" class="hidden text-[11px] font-bold text-rbxMuted hover:text-white px-2 py-0.5 rounded bg-rbxCard">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="px-4 pt-2 pb-1">
+          <span id="resultsSectionLabel" class="text-[12px] font-bold text-rbxMuted uppercase tracking-wider">My friends (5)</span>
+        </div>
+
+        <div id="userResultsList" class="flex-1 overflow-y-auto px-2 pb-4 space-y-0.5"></div>
+      </div>
+
+      <!-- STEP 2: CHOOSE AMOUNT -->
+      <div id="step2View" class="hidden flex-col h-full justify-between">
+        <div>
+          <div class="px-4 pt-4 pb-3 border-b border-rbxBorder flex items-center justify-between">
+            <button type="button" onclick="goToStep(1)" class="text-[13px] font-semibold text-rbxMuted hover:text-white flex items-center space-x-1">
+              <span>← Back</span>
+            </button>
+            <h3 class="text-[16px] font-extrabold text-white">Enter Amount</h3>
+            <button type="button" onclick="closeSendModal()" class="w-8 h-8 rounded-full bg-rbxPill text-rbxMuted hover:text-white flex items-center justify-center text-sm">
+              ✕
+            </button>
+          </div>
+
+          <div class="p-4 space-y-5">
+            <div class="flex items-center space-x-3 bg-rbxPill/70 border border-rbxBorder rounded-2xl p-3">
+              <img id="step2Avatar" src="" alt="Recipient" class="w-12 h-12 rounded-full object-cover bg-rbxCard border border-[#343741]" />
+              <div>
+                <div class="text-[11px] text-rbxMuted">Sending to</div>
+                <div id="step2Name" class="text-[15px] font-extrabold text-white">@Roblox</div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[12px] font-bold text-rbxMuted uppercase tracking-wider mb-2">Robux amount</label>
+              <input
+                type="text"
+                id="sendAmountInput"
+                inputmode="numeric"
+                value="0"
+                oninput="handleAmountChange(this)"
+                class="w-full bg-rbxPill border border-[#343741] focus:border-rbxBlue rounded-2xl px-4 py-3.5 text-[24px] font-black text-white outline-none"
+              />
+            </div>
+
+            <div class="grid grid-cols-4 gap-2">
+              <button type="button" onclick="applyPresetAmount(25)" class="bg-rbxPill hover:bg-rbxPillHover border border-[#343741] rounded-xl py-2 text-[12px] font-bold text-white transition">R$ 25</button>
+              <button type="button" onclick="applyPresetAmount(50)" class="bg-rbxPill hover:bg-rbxPillHover border border-[#343741] rounded-xl py-2 text-[12px] font-bold text-white transition">R$ 50</button>
+              <button type="button" onclick="applyPresetAmount(100)" class="bg-rbxPill hover:bg-rbxPillHover border border-[#343741] rounded-xl py-2 text-[12px] font-bold text-white transition">R$ 100</button>
+              <button type="button" onclick="applyPresetAmount(200)" class="bg-rbxPill hover:bg-rbxPillHover border border-[#343741] rounded-xl py-2 text-[12px] font-bold text-white transition">R$ 200</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-rbxBorder">
+          <button type="button" id="step2NextBtn" onclick="goToStep(3)" disabled class="w-full bg-rbxBlue/40 text-white/50 cursor-not-allowed font-bold text-[15px] py-3 rounded-xl transition">
+            Next
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: CONFIRM TRANSFER -->
+      <div id="step3View" class="hidden flex-col h-full justify-between">
+        <div>
+          <div class="px-4 pt-4 pb-3 border-b border-rbxBorder flex items-center justify-between">
+            <button type="button" onclick="goToStep(2)" class="text-[13px] font-semibold text-rbxMuted hover:text-white flex items-center space-x-1">
+              <span>← Back</span>
+            </button>
+            <h3 class="text-[16px] font-extrabold text-white">Confirm Send</h3>
+            <button type="button" onclick="closeSendModal()" class="w-8 h-8 rounded-full bg-rbxPill text-rbxMuted hover:text-white flex items-center justify-center text-sm">
+              ✕
+            </button>
+          </div>
+
+          <div class="p-4 space-y-4">
+            <div class="bg-rbxPill/70 border border-rbxBorder rounded-2xl p-4 flex items-center space-x-3.5">
+              <img id="step3Avatar" src="" alt="Recipient" class="w-14 h-14 rounded-full object-cover bg-rbxCard border border-[#343741]" />
+              <div class="min-w-0">
+                <div id="step3DisplayName" class="text-[16px] font-extrabold text-white truncate">Roblox</div>
+                <div id="step3Username" class="text-[12px] text-rbxMuted truncate">@Roblox</div>
+                <div id="step3ConnectionText" class="text-[11px] text-emerald-400 mt-0.5">Friend • 9 mutual Connections</div>
+                <div id="step3JoinedText" class="text-[11px] text-rbxMuted">Joined in 2006</div>
+              </div>
+            </div>
+
+            <div class="bg-rbxPill/50 border border-rbxBorder rounded-2xl p-4 space-y-2.5">
+              <div class="flex items-center justify-between text-[13px]">
+                <span class="text-rbxMuted">Transfer amount</span>
+                <span class="font-extrabold text-white"><span id="step3AmountDisplay">0</span> Robux</span>
+              </div>
+              <div class="flex items-center justify-between text-[13px]">
+                <span class="text-rbxMuted">Current balance</span>
+                <span class="font-bold text-white"><span id="step3BalanceDisplay">495,000,000</span> Robux</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-rbxBorder">
+          <button type="button" onclick="confirmAndSendRobux()" class="w-full bg-rbxBlue hover:bg-rbxBlueHover active:scale-[0.99] text-white font-bold text-[15px] py-3.5 rounded-xl transition shadow-md">
+            Send Now
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- JAVASCRIPT APPLICATION LOGIC                                            -->
+  <!-- ======================================================================= -->
+  <script>
+    const DEFAULT_BALANCE = 495000000;
+    let currentBalance = DEFAULT_BALANCE;
+    let soundEnabled = true;
+    let selectedRecipient = null;
+    let sendAmount = 0;
+    let searchDebounce = null;
+
+    // Robux Packages Data
+    const robuxPackages = [
+      { amount: 22500, priceLabel: '₱11.49K' },
+      { amount: 10000, priceLabel: '₱5,700.00' },
+      { amount: 4500,  priceLabel: '₱2,890.00' },
+      { amount: 1700,  priceLabel: '₱1,150.00' },
+      { amount: 800,   priceLabel: '₱575.00' },
+      { amount: 400,   priceLabel: '₱289.00' }
     ];
 
-    function displayGifs(gifs) {
-      const grid = document.getElementById('gifGrid');
-      grid.innerHTML = '';
+    // Pre-loaded "My friends (5)" list
+    const myFriends = [
+      {
+        id: 24918201,
+        displayName: 'Cid',
+        username: 'cid_rbx',
+        isFriend: true,
+        mutuals: 4,
+        joinedYear: 2018
+      },
+      {
+        id: 11223344,
+        displayName: 'NoobMaster',
+        username: 'NoobMaster',
+        isFriend: true,
+        mutuals: 7,
+        joinedYear: 2017
+      },
+      {
+        id: 140258990,
+        displayName: 'KreekCraft',
+        username: 'KreekCraft',
+        isFriend: true,
+        mutuals: 2,
+        joinedYear: 2011
+      },
+      {
+        id: 156,
+        displayName: 'Builderman',
+        username: 'builderman',
+        isFriend: true,
+        mutuals: 12,
+        joinedYear: 2006
+      },
+      {
+        id: 1,
+        displayName: 'Roblox',
+        username: 'Roblox',
+        isFriend: true,
+        mutuals: 9,
+        joinedYear: 2006
+      }
+    ];
 
-      if (gifs.length === 0) {
-        grid.innerHTML = '<p style="grid-column: 1/-1; color: #94a3b8; font-size: 18px;">Hesh nárse tabılmadı!</p>';
-        return;
+    // Curated fallback users for realistic search results (including "po" -> PO3, po3 @frogs2lol, Po3 @Jittyzz)
+    const fallbackDirectory = [
+      { id: 9812341, displayName: 'PO3', username: 'PO3', isFriend: false, mutuals: 0, joinedYear: 2020 },
+      { id: 8841293, displayName: 'po3', username: 'frogs2lol', isFriend: false, mutuals: 0, joinedYear: 2019 },
+      { id: 7712934, displayName: 'Po3', username: 'Jittyzz', isFriend: false, mutuals: 0, joinedYear: 2021 },
+      { id: 339310190, displayName: 'Albert', username: 'mrflimflam', isFriend: false, mutuals: 1, joinedYear: 2017 },
+      { id: 61614331, displayName: 'TanqR', username: 'TanqR', isFriend: false, mutuals: 0, joinedYear: 2014 },
+      { id: 121999117, displayName: 'Denis', username: 'DenisDaily', isFriend: false, mutuals: 0, joinedYear: 2016 }
+    ];
+
+    // Web Audio Chimes
+    function playUiSound(type) {
+      if (!soundEnabled) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'tap') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(760, ctx.currentTime + 0.045);
+          gain.gain.setValueAtTime(0.06, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.045);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.045);
+        } else if (type === 'success') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+          osc.frequency.setValueAtTime(880, ctx.currentTime + 0.09);
+          gain.gain.setValueAtTime(0.09, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.32);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.32);
+        } else if (type === 'firework') {
+          // Celebratory firework pop + triumphant Robux chord chime
+          const now = ctx.currentTime;
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+          notes.forEach((freq, idx) => {
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.type = idx % 2 === 0 ? 'triangle' : 'sine';
+            o.frequency.setValueAtTime(freq, now + idx * 0.055);
+            g.gain.setValueAtTime(0.08, now + idx * 0.055);
+            g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.055 + 0.45);
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.start(now + idx * 0.055);
+            o.stop(now + idx * 0.055 + 0.45);
+          });
+
+          // Subtle firework burst noise
+          const bufferSize = ctx.sampleRate * 0.28;
+          const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const output = noiseBuffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.06));
+          }
+          const whiteNoise = ctx.createBufferSource();
+          whiteNoise.buffer = noiseBuffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.value = 900;
+          const noiseGain = ctx.createGain();
+          noiseGain.gain.setValueAtTime(0.14, now);
+          noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          whiteNoise.connect(filter);
+          filter.connect(noiseGain);
+          noiseGain.connect(ctx.destination);
+          whiteNoise.start(now);
+        }
+      } catch (e) {}
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundOnIcon').classList.toggle('hidden', !soundEnabled);
+      document.getElementById('soundOffIcon').classList.toggle('hidden', soundEnabled);
+    }
+
+    // Formatting & Avatar Helpers
+    function formatNumber(val) {
+      return Number(val || 0).toLocaleString('en-US');
+    }
+
+    function parseDigits(str) {
+      return parseInt(String(str || '').replace(/[^0-9]/g, ''), 10) || 0;
+    }
+
+    function getHeadshotUrl(userId) {
+      return createRobloxAvatarSvg(userId);
+    }
+
+    function createRobloxAvatarSvg(seed) {
+      const str = String(seed || 'R').toLowerCase();
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const h = Math.abs(hash);
+
+      // Specific iconic looks for famous accounts + deterministic Roblox avatar traits
+      const knownPresets = {
+        roblox: {
+          bg: '#2A2F3D',
+          skin: '#F5C443',
+          hair: '#1F2937',
+          shirt: '#E5E7EB',
+          accent: '#3574F2',
+          hat: 'cap',
+          face: 'smile',
+          badge: 'R'
+        },
+        builderman: {
+          bg: '#232836',
+          skin: '#F6C645',
+          hair: '#3B2818',
+          shirt: '#2563EB',
+          accent: '#F59E0B',
+          hat: 'cap',
+          face: 'grin',
+          badge: 'BM'
+        },
+        kreekcraft: {
+          bg: '#1D2939',
+          skin: '#F3C096',
+          hair: '#111827',
+          shirt: '#10B981',
+          accent: '#059669',
+          hat: 'beanie',
+          face: 'hyped',
+          badge: 'KC'
+        },
+        mrflimflam: {
+          bg: '#272238',
+          skin: '#FCD5B5',
+          hair: '#78350F',
+          shirt: '#8B5CF6',
+          accent: '#C4B5FD',
+          hat: 'none',
+          face: 'smirk',
+          badge: 'FL'
+        },
+        tanqr: {
+          bg: '#18262F',
+          skin: '#E0AC69',
+          hair: '#18181B',
+          shirt: '#06B6D4',
+          accent: '#0E7490',
+          hat: 'visor',
+          face: 'grin',
+          badge: 'TQ'
+        },
+        denisdaily: {
+          bg: '#2C211D',
+          skin: '#F3C096',
+          hair: '#451A03',
+          shirt: '#F97316',
+          accent: '#FDBA74',
+          hat: 'cap',
+          face: 'smile',
+          badge: 'DD'
+        }
+      };
+
+      const skins = ['#F5C443', '#F3C096', '#E0AC69', '#C68642', '#8D5524', '#FDE68A'];
+      const hairs = ['#111827', '#3B2818', '#78350F', '#4B5563', '#B91C1C', '#1D4ED8'];
+      const shirts = ['#3574F2', '#00B06F', '#EC4899', '#F59E0B', '#8B5CF6', '#EF4444', '#06B6D4'];
+      const bgs = ['#1A1F2C', '#18242B', '#251D33', '#2A201A', '#172822', '#261B24'];
+      const hats = ['cap', 'beanie', 'visor', 'none'];
+      const faces = ['smile', 'grin', 'smirk', 'hyped'];
+
+      const cfg = knownPresets[str] || {
+        bg: bgs[h % bgs.length],
+        skin: skins[(h >> 2) % skins.length],
+        hair: hairs[(h >> 4) % hairs.length],
+        shirt: shirts[(h >> 6) % shirts.length],
+        accent: '#FFFFFF',
+        hat: hats[(h >> 8) % hats.length],
+        face: faces[(h >> 10) % faces.length],
+        badge: ''
+      };
+
+      // Shading helper on skin
+      const eyeColor = '#111318';
+
+      // Hat SVG layer
+      let hatSvg = '';
+      if (cfg.hat === 'cap') {
+        hatSvg = `
+          <path d="M35 36 C35 20, 85 20, 85 36 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
+          <rect x="33" y="34" width="54" height="6" rx="3" fill="${encodeURIComponent(cfg.accent)}"/>
+          <path d="M54 37 L89 37 C92 37, 93 41, 88 42 L54 41 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
+        `;
+      } else if (cfg.hat === 'beanie') {
+        hatSvg = `
+          <path d="M35 38 C35 19, 85 19, 85 38 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
+          <rect x="34" y="33" width="52" height="8" rx="4" fill="${encodeURIComponent(cfg.accent)}"/>
+          <circle cx="60" cy="17" r="6" fill="${encodeURIComponent(cfg.accent)}"/>
+        `;
+      } else if (cfg.hat === 'visor') {
+        hatSvg = `
+          <path d="M36 35 C36 22, 84 22, 84 35 Z" fill="${encodeURIComponent(cfg.hair)}"/>
+          <path d="M35 35 L91 35 C93 35, 93 39, 89 40 L35 39 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
+        `;
+      } else {
+        hatSvg = `
+          <path d="M36 37 C36 21, 84 21, 84 37 C76 31, 44 31, 36 37 Z" fill="${encodeURIComponent(cfg.hair)}"/>
+        `;
       }
 
-      gifs.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <img src="${item.url}" alt="${item.title}" loading="lazy" onclick="openModal('${item.url}', '${item.title}')">
-          <div class="card-title" title="${item.title}">${item.title}</div>
-          <div class="card-actions">
-            <a href="${item.url}" download="meme.gif" class="action-btn btn-download" target="_blank">📥 Júklew</a>
-            <button class="action-btn btn-like" onclick="likeGif(this, ${index})">❤️ <span id="like-${index}">${item.likes}</span></button>
-          </div>
-          <div class="card-meta">
-            <span>📁 GIF (${item.size})</span>
-            <span>👁️ ${item.views}</span>
-          </div>
+      // Classic Roblox Face SVG layer
+      let faceSvg = `
+        <ellipse cx="49" cy="48" rx="4.2" ry="5.6" fill="${encodeURIComponent(eyeColor)}"/>
+        <ellipse cx="71" cy="48" rx="4.2" ry="5.6" fill="${encodeURIComponent(eyeColor)}"/>
+        <circle cx="47.7" cy="46.2" r="1.4" fill="%23FFFFFF"/>
+        <circle cx="69.7" cy="46.2" r="1.4" fill="%23FFFFFF"/>
+      `;
+
+      if (cfg.face === 'smile') {
+        faceSvg += `<path d="M48 58 Q60 66 72 58" stroke="${encodeURIComponent(eyeColor)}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+      } else if (cfg.face === 'grin') {
+        faceSvg += `
+          <path d="M47 57 Q60 68 73 57 Z" fill="${encodeURIComponent(eyeColor)}"/>
+          <path d="M49 58.5 L71 58.5" stroke="%23FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
         `;
-        grid.appendChild(card);
+      } else if (cfg.face === 'smirk') {
+        faceSvg += `<path d="M51 60 Q61 62 71 56" stroke="${encodeURIComponent(eyeColor)}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+      } else {
+        faceSvg += `<circle cx="60" cy="60" r="4.5" fill="${encodeURIComponent(eyeColor)}"/>`;
+      }
+
+      const badgeSvg = cfg.badge
+        ? `<rect x="44" y="84" width="32" height="15" rx="6" fill="%23111216" fill-opacity="0.45"/><text x="60" y="94.5" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="900" fill="%23FFFFFF" text-anchor="middle">${encodeURIComponent(cfg.badge)}</text>`
+        : '';
+
+      return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+        <rect width="120" height="120" fill="${encodeURIComponent(cfg.bg)}"/>
+        <!-- Shoulders & Roblox Torso -->
+        <path d="M22 120 C24 84, 38 76, 60 76 C82 76, 96 84, 98 120 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
+        <!-- Collar / Hoodie / Stripe detail -->
+        <path d="M48 76 L60 88 L72 76" fill="none" stroke="${encodeURIComponent(cfg.accent)}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Neck -->
+        <rect x="51" y="66" width="18" height="12" rx="4" fill="${encodeURIComponent(cfg.skin)}"/>
+        <!-- Classic Rounded Square Roblox Head -->
+        <rect x="35" y="31" width="50" height="39" rx="14" fill="${encodeURIComponent(cfg.skin)}"/>
+        <!-- Subtle highlight on left/top of head -->
+        <rect x="38" y="34" width="44" height="5" rx="2.5" fill="%23FFFFFF" fill-opacity="0.22"/>
+        ${faceSvg}
+        ${hatSvg}
+        ${badgeSvg}
+      </svg>`;
+    }
+
+    function syncBalanceUI() {
+      const formatted = formatNumber(currentBalance);
+      document.getElementById('headerBalance').innerText = formatted;
+      const step3Bal = document.getElementById('step3BalanceDisplay');
+      if (step3Bal) step3Bal.innerText = formatted;
+    }
+
+    function resetSimulator() {
+      playUiSound('tap');
+      currentBalance = DEFAULT_BALANCE;
+      selectedRecipient = null;
+      sendAmount = 0;
+      syncBalanceUI();
+      showTopToast('Simulator reset to default balance.');
+    }
+
+    // Balance Modal Controls
+    function openBalanceModal() {
+      playUiSound('tap');
+      document.getElementById('balanceEditInput').value = formatNumber(currentBalance);
+      const backdrop = document.getElementById('balanceModalBackdrop');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      setTimeout(() => document.getElementById('balanceEditInput').focus(), 60);
+    }
+
+    function closeBalanceModal() {
+      const backdrop = document.getElementById('balanceModalBackdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
+    }
+
+    function formatBalanceInput(input) {
+      const digits = parseDigits(input.value);
+      input.value = formatNumber(digits);
+    }
+
+    function saveBalanceEdit() {
+      playUiSound('tap');
+      currentBalance = parseDigits(document.getElementById('balanceEditInput').value);
+      syncBalanceUI();
+      closeBalanceModal();
+    }
+
+    // Robux Packages Renderer
+    function renderPackages() {
+      const list = document.getElementById('packagesList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      robuxPackages.forEach(pkg => {
+        const card = document.createElement('div');
+        card.className = 'bg-rbxCard border border-rbxBorder rounded-2xl px-4 py-3.5 flex items-center justify-between';
+        card.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-rbxPill border border-[#343741] flex items-center justify-center text-white font-black text-xs">
+              R$
+            </div>
+            <div>
+              <div class="text-[15px] font-extrabold text-white">${formatNumber(pkg.amount)}</div>
+              <div class="text-[11px] text-rbxMuted">Robux package</div>
+            </div>
+          </div>
+          <button type="button" onclick="quickBuyPackage(${pkg.amount})" class="bg-rbxPill hover:bg-rbxPillHover active:scale-95 border border-[#343741] text-white text-[13px] font-bold px-3.5 py-1.5 rounded-xl transition">
+            ${pkg.priceLabel}
+          </button>
+        `;
+        list.appendChild(card);
       });
     }
 
-    function likeGif(btn, index) {
-      const span = document.getElementById(`like-${index}`);
-      memeDatabase[index].likes++;
-      span.textContent = memeDatabase[index].likes;
-      btn.style.transform = 'scale(1.1)';
-      setTimeout(() => btn.style.transform = 'scale(1)', 200);
+    function quickBuyPackage(pkgAmount) {
+      playUiSound('tap');
+      currentBalance += pkgAmount;
+      syncBalanceUI();
+      showTopToast(`Added +${formatNumber(pkgAmount)} Robux to balance!`);
+      launchRobuxFireworks();
     }
 
-    function openModal(url, title) {
-      const modal = document.getElementById('gifModal');
-      document.getElementById('modalImg').src = url;
-      document.getElementById('modalText').textContent = title;
-      document.getElementById('modalDownload').href = url;
-      modal.style.display = 'flex';
+    // Send Modal Controls
+    function openSendModal() {
+      playUiSound('tap');
+      selectedRecipient = null;
+      sendAmount = 0;
+
+      const searchInput = document.getElementById('searchUsernameInput');
+      searchInput.value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      document.getElementById('searchSpinner').classList.add('hidden');
+      renderUserList(myFriends, 'My friends (5)');
+
+      const backdrop = document.getElementById('sendModalBackdrop');
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      goToStep(1);
     }
 
-    function closeModal() {
-      document.getElementById('gifModal').style.display = 'none';
+    function closeSendModal() {
+      const backdrop = document.getElementById('sendModalBackdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
     }
 
-    function searchGifs() {
-      const val = document.getElementById('searchInput').value.toLowerCase().trim();
-      if (!val) {
-        displayGifs(memeDatabase);
+    // Step 3 -> Step 4: Execute Send & Show Top Pill Notification + Robux Fireworks
+    function confirmAndSendRobux() {
+      if (!selectedRecipient || sendAmount <= 0) return;
+
+      // Deduct from balance (if sendAmount > currentBalance, keep at 0 cleanly)
+      currentBalance = Math.max(0, currentBalance - sendAmount);
+      syncBalanceUI();
+
+      const balEl = document.getElementById('headerBalance');
+      if (balEl) {
+        balEl.classList.remove('animate-balance-pulse');
+        void balEl.offsetWidth;
+        balEl.classList.add('animate-balance-pulse');
+      }
+
+      closeSendModal();
+
+      const recipientName = selectedRecipient.displayName || selectedRecipient.username;
+      showTopToast(`Successfully sent ${formatNumber(sendAmount)} Robux to ${recipientName}!`);
+      launchRobuxFireworks();
+    }
+
+    // =====================================================================
+    // ROBUX FIREWORKS / SALYUT PARTICLE ENGINE (HTML5 CANVAS)
+    // =====================================================================
+    const fwCanvas = document.getElementById('robuxFireworksCanvas');
+    const fwCtx = fwCanvas.getContext('2d');
+    let fwRockets = [];
+    let fwParticles = [];
+    let fwAnimating = false;
+    let fwTimeouts = [];
+
+    function clearFireworkTimers() {
+      fwTimeouts.forEach(id => clearTimeout(id));
+      fwTimeouts = [];
+    }
+
+    function resizeFireworksCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      fwCanvas.width = window.innerWidth * dpr;
+      fwCanvas.height = window.innerHeight * dpr;
+      fwCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', resizeFireworksCanvas);
+    resizeFireworksCanvas();
+
+    const ROBUX_PALETTES = [
+      { fill: '#FBBF24', stroke: '#FEF08A', text: '#78350F', glow: 'rgba(251, 191, 36, 0.7)' }, // Gold
+      { fill: '#00D184', stroke: '#A7F3D0', text: '#064E3B', glow: 'rgba(0, 209, 132, 0.7)' },  // Roblox Emerald
+      { fill: '#FFFFFF', stroke: '#E2E8F0', text: '#111216', glow: 'rgba(255, 255, 255, 0.7)' }, // Classic White
+      { fill: '#F59E0B', stroke: '#FDE68A', text: '#451A03', glow: 'rgba(245, 158, 11, 0.7)' }  // Amber Gold
+    ];
+
+    function drawHexagonRobuxCoin(ctx, x, y, radius, spinScaleX, rotation, palette, alpha) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.scale(Math.max(0.18, Math.abs(spinScaleX)), 1);
+
+      // Outer glow
+      ctx.shadowColor = palette.glow;
+      ctx.shadowBlur = 10;
+
+      // Hexagon path
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 2;
+        const px = Math.cos(angle) * radius;
+        const py = Math.sin(angle) * radius;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = palette.fill;
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = palette.stroke;
+      ctx.stroke();
+
+      // Inner hexagon ring
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 2;
+        const px = Math.cos(angle) * (radius * 0.74);
+        const py = Math.sin(angle) * (radius * 0.74);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = palette.text;
+      ctx.stroke();
+
+      // Center R$ emblem
+      ctx.fillStyle = palette.text;
+      ctx.font = `900 ${Math.max(8, Math.round(radius * 0.78))}px Inter, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('R$', 0, 0.5);
+
+      ctx.restore();
+    }
+
+    function createRobuxBurst(cx, cy, coinCount = 26, sparkCount = 42) {
+      playUiSound('firework');
+
+      // Spawn spinning hexagonal Robux coins
+      for (let i = 0; i < coinCount; i++) {
+        const angle = (Math.PI * 2 * i) / coinCount + (Math.random() - 0.5) * 0.25;
+        const speed = 3.2 + Math.random() * 6.8;
+        const palette = ROBUX_PALETTES[Math.floor(Math.random() * ROBUX_PALETTES.length)];
+        fwParticles.push({
+          type: 'coin',
+          x: cx,
+          y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 1.5,
+          gravity: 0.14 + Math.random() * 0.05,
+          drag: 0.975,
+          radius: 10 + Math.random() * 6,
+          rotation: Math.random() * Math.PI * 2,
+          vRot: (Math.random() - 0.5) * 0.14,
+          spinPhase: Math.random() * Math.PI * 2,
+          spinSpeed: 0.12 + Math.random() * 0.14,
+          palette,
+          life: 1,
+          decay: 0.009 + Math.random() * 0.006
+        });
+      }
+
+      // Spawn bright glitter sparks
+      for (let i = 0; i < sparkCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2 + Math.random() * 9.5;
+        const palette = ROBUX_PALETTES[Math.floor(Math.random() * ROBUX_PALETTES.length)];
+        fwParticles.push({
+          type: 'spark',
+          x: cx,
+          y: cy,
+          prevX: cx,
+          prevY: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 1.2,
+          gravity: 0.11,
+          drag: 0.95,
+          size: 2 + Math.random() * 2.5,
+          color: palette.fill,
+          life: 1,
+          decay: 0.015 + Math.random() * 0.015
+        });
+      }
+    }
+
+    function launchRocket(startX, targetX, targetY) {
+      fwRockets.push({
+        x: startX,
+        y: window.innerHeight + 10,
+        targetX,
+        targetY,
+        vx: (targetX - startX) * 0.035,
+        vy: -11 - Math.random() * 3.5,
+        trail: []
+      });
+    }
+
+    function launchRobuxFireworks() {
+      clearFireworkTimers();
+      resizeFireworksCanvas();
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const center = w / 2;
+      const spread = Math.min(w * 0.36, 175);
+
+      // Wave 1: Instant center-top celebratory burst + rising rockets
+      createRobuxBurst(center, h * 0.32, 30, 48);
+      launchRocket(center - spread * 0.7, center - spread, h * 0.25);
+      launchRocket(center + spread * 0.7, center + spread, h * 0.25);
+
+      // Wave 2: Delayed side salyut bursts
+      fwTimeouts.push(setTimeout(() => {
+        launchRocket(center, center - spread * 0.45, h * 0.20);
+        launchRocket(center, center + spread * 0.45, h * 0.22);
+      }, 280));
+
+      // Wave 3: Finale center burst
+      fwTimeouts.push(setTimeout(() => {
+        createRobuxBurst(center, h * 0.28, 34, 54);
+      }, 650));
+
+      if (!fwAnimating) {
+        fwAnimating = true;
+        requestAnimationFrame(animateRobuxFireworks);
+      }
+    }
+
+    function animateRobuxFireworks() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      fwCtx.clearRect(0, 0, w, h);
+
+      // Update & draw rising rockets
+      for (let i = fwRockets.length - 1; i >= 0; i--) {
+        const r = fwRockets[i];
+        r.trail.push({ x: r.x, y: r.y });
+        if (r.trail.length > 8) r.trail.shift();
+
+        r.x += r.vx;
+        r.y += r.vy;
+        r.vy += 0.16;
+
+        // Draw glowing rocket trail
+        for (let t = 0; t < r.trail.length; t++) {
+          const pt = r.trail[t];
+          fwCtx.beginPath();
+          fwCtx.arc(pt.x, pt.y, (t / r.trail.length) * 3.5, 0, Math.PI * 2);
+          fwCtx.fillStyle = `rgba(251, 191, 36, ${(t / r.trail.length) * 0.85})`;
+          fwCtx.fill();
+        }
+
+        // Explode when reaching target altitude or apex
+        if (r.y <= r.targetY || r.vy >= -1.5) {
+          createRobuxBurst(r.x, r.y, 24, 38);
+          fwRockets.splice(i, 1);
+        }
+      }
+
+      // Update & draw Robux coins + glitter sparks
+      for (let i = fwParticles.length - 1; i >= 0; i--) {
+        const p = fwParticles[i];
+        if (p.type === 'spark') {
+          p.prevX = p.x;
+          p.prevY = p.y;
+        }
+
+        p.vx *= p.drag;
+        p.vy = p.vy * p.drag + p.gravity;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= p.decay;
+
+        if (p.life <= 0 || p.y > h + 40) {
+          fwParticles.splice(i, 1);
+          continue;
+        }
+
+        if (p.type === 'coin') {
+          p.rotation += p.vRot;
+          p.spinPhase += p.spinSpeed;
+          const spinScaleX = Math.cos(p.spinPhase);
+          drawHexagonRobuxCoin(fwCtx, p.x, p.y, p.radius, spinScaleX, p.rotation, p.palette, p.life);
+        } else {
+          fwCtx.save();
+          fwCtx.globalAlpha = Math.max(0, p.life);
+          fwCtx.strokeStyle = p.color;
+          fwCtx.lineWidth = p.size;
+          fwCtx.lineCap = 'round';
+          fwCtx.beginPath();
+          fwCtx.moveTo(p.prevX, p.prevY);
+          fwCtx.lineTo(p.x, p.y);
+          fwCtx.stroke();
+          fwCtx.restore();
+        }
+      }
+
+      if (fwRockets.length > 0 || fwParticles.length > 0) {
+        requestAnimationFrame(animateRobuxFireworks);
+      } else {
+        fwAnimating = false;
+        fwCtx.clearRect(0, 0, w, h);
+      }
+    }
+
+    function goToStep(stepNum) {
+      if (stepNum > 1) playUiSound('tap');
+      document.getElementById('step1View').classList.toggle('hidden', stepNum !== 1);
+      document.getElementById('step1View').classList.toggle('flex', stepNum === 1);
+
+      document.getElementById('step2View').classList.toggle('hidden', stepNum !== 2);
+      document.getElementById('step2View').classList.toggle('flex', stepNum === 2);
+
+      document.getElementById('step3View').classList.toggle('hidden', stepNum !== 3);
+      document.getElementById('step3View').classList.toggle('flex', stepNum === 3);
+
+      if (stepNum === 2 && selectedRecipient) {
+        const fallback = createRobloxAvatarSvg(selectedRecipient.username);
+        const img = document.getElementById('step2Avatar');
+        img.onerror = () => { img.src = fallback; };
+        img.src = selectedRecipient.avatarUrl || fallback;
+        document.getElementById('step2Name').innerText = '@' + selectedRecipient.username;
+
+        const amtInput = document.getElementById('sendAmountInput');
+        if (sendAmount === 0) {
+          amtInput.value = '0';
+        }
+        updateStep2NextState();
+        setTimeout(() => amtInput.focus(), 60);
+      }
+
+      if (stepNum === 3 && selectedRecipient) {
+        syncBalanceUI();
+        const fallback = createRobloxAvatarSvg(selectedRecipient.username);
+        const img = document.getElementById('step3Avatar');
+        img.onerror = () => { img.src = fallback; };
+        img.src = selectedRecipient.avatarUrl || fallback;
+
+        document.getElementById('step3DisplayName').innerText = selectedRecipient.displayName;
+        document.getElementById('step3Username').innerText = '@' + selectedRecipient.username;
+        document.getElementById('step3ConnectionText').innerText = selectedRecipient.isFriend
+          ? `Friend • ${selectedRecipient.mutuals || 3} mutual Connections`
+          : `New Connection • ${selectedRecipient.mutuals || 0} mutual Connections`;
+        document.getElementById('step3JoinedText').innerText = `Joined in ${selectedRecipient.joinedYear || 2019}`;
+        document.getElementById('step3AmountDisplay').innerText = formatNumber(sendAmount);
+      }
+    }
+
+    // Step 1: Search Users
+    function clearSearchField() {
+      playUiSound('tap');
+      const input = document.getElementById('searchUsernameInput');
+      input.value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      renderUserList(myFriends, 'My friends (5)');
+      input.focus();
+    }
+
+    function handleSearchInput(rawQuery) {
+      const q = rawQuery.trim();
+      document.getElementById('clearSearchBtn').classList.toggle('hidden', q.length === 0);
+
+      if (searchDebounce) clearTimeout(searchDebounce);
+
+      if (!q) {
+        document.getElementById('searchSpinner').classList.add('hidden');
+        renderUserList(myFriends, 'My friends (5)');
         return;
       }
-      const filtered = memeDatabase.filter(gif => 
-        gif.title.toLowerCase().includes(val) || gif.category.toLowerCase().includes(val)
+
+      document.getElementById('searchSpinner').classList.remove('hidden');
+      searchDebounce = setTimeout(() => performUserSearch(q), 320);
+    }
+
+    async function performUserSearch(query) {
+      const lower = query.toLowerCase();
+      const combinedPool = [...myFriends, ...fallbackDirectory];
+      const localMatches = combinedPool.filter(u =>
+        u.username.toLowerCase().includes(lower) ||
+        u.displayName.toLowerCase().includes(lower)
       );
-      displayGifs(filtered);
+
+      let apiResults = [];
+      try {
+        const res = await fetch(`https://users.roproxy.com/v1/users/search?keyword=${encodeURIComponent(query)}&limit=10`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json && Array.isArray(json.data)) {
+            apiResults = json.data.map(item => ({
+              id: item.id,
+              displayName: item.displayName || item.name,
+              username: item.name,
+              isFriend: myFriends.some(f => f.username.toLowerCase() === item.name.toLowerCase()),
+              mutuals: 0,
+              joinedYear: 2018 + (item.id % 6)
+            }));
+          }
+        }
+      } catch (err) {}
+
+      // Merge unique results
+      const merged = [];
+      const seen = new Set();
+
+      [...localMatches, ...apiResults].forEach(user => {
+        const key = user.username.toLowerCase();
+        if (!seen.has(key)) {
+          seen.add(key);
+          merged.push(user);
+        }
+      });
+
+      // Guarantee at least the exact typed username appears as a selectable result
+      if (!seen.has(lower)) {
+        merged.unshift({
+          id: Math.abs(query.split('').reduce((a, b) => a + b.charCodeAt(0), 100000)),
+          displayName: query,
+          username: query.replace(/\s+/g, ''),
+          isFriend: false,
+          mutuals: 0,
+          joinedYear: 2020
+        });
+      }
+
+      document.getElementById('searchSpinner').classList.add('hidden');
+      renderUserList(merged, 'Search Results');
     }
 
-    function quickSearch(tag) {
-      document.getElementById('searchInput').value = tag;
-      searchGifs();
+    function renderUserList(users, sectionTitle) {
+      document.getElementById('resultsSectionLabel').innerText = sectionTitle;
+      const container = document.getElementById('userResultsList');
+      container.innerHTML = '';
+
+      users.forEach(user => {
+        const avatarUrl = getHeadshotUrl(user.username || user.id);
+        const fallbackSvg = createRobloxAvatarSvg(user.username || user.id);
+
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'w-full flex items-center space-x-3 px-2.5 py-2 rounded-xl hover:bg-rbxPill/80 active:bg-rbxPill transition text-left';
+        row.onclick = () => {
+          selectedRecipient = {
+            ...user,
+            avatarUrl: avatarUrl || fallbackSvg
+          };
+          sendAmount = 0;
+          goToStep(2);
+        };
+
+        row.innerHTML = `
+          <div class="w-11 h-11 rounded-full bg-rbxPill border border-[#343741] overflow-hidden flex-shrink-0">
+            <img src="${avatarUrl || fallbackSvg}" alt="${user.username}" onerror="this.src='${fallbackSvg}'" class="w-full h-full object-cover" />
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-[14px] font-bold text-white truncate">${user.displayName}</div>
+            <div class="text-[12px] text-rbxMuted truncate">@${user.username}</div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
     }
 
-    displayGifs(memeDatabase);
+    // Step 2: Amount Input & Presets
+    function handleAmountChange(input) {
+      const digits = parseDigits(input.value);
+      sendAmount = digits;
+      input.value = digits === 0 ? '0' : formatNumber(digits);
+      updateStep2NextState();
+    }
+
+    function applyPresetAmount(presetVal) {
+      playUiSound('tap');
+      sendAmount = presetVal;
+      document.getElementById('sendAmountInput').value = formatNumber(sendAmount);
+      updateStep2NextState();
+    }
+
+    function updateStep2NextState() {
+      const btn = document.getElementById('step2NextBtn');
+      if (sendAmount > 0) {
+        btn.disabled = false;
+        btn.className = 'w-full bg-rbxBlue hover:bg-rbxBlueHover active:scale-[0.99] text-white font-bold text-[15px] py-3 rounded-xl transition shadow-md cursor-pointer';
+      } else {
+        btn.disabled = true;
+        btn.className = 'w-full bg-rbxBlue/40 text-white/50 cursor-not-allowed font-bold text-[15px] py-3 rounded-xl transition';
+      }
+    }
+
+    // Top Dark Pill Toast Notification matching the video
+    function showTopToast(message) {
+      const wrapper = document.getElementById('toastWrapper');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto animate-toast-drop w-full bg-[#23252C] border border-[#383B46] rounded-full px-3.5 py-2.5 shadow-2xl flex items-center justify-between space-x-2.5';
+
+      toast.innerHTML = `
+        <div class="w-5 h-5 rounded-full bg-white text-[#111216] flex items-center justify-center flex-shrink-0">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="text-[12.5px] font-semibold text-white truncate flex-1 text-left">
+          ${message}
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="text-rbxMuted hover:text-white w-5 h-5 flex items-center justify-center flex-shrink-0 text-xs">
+          ✕
+        </button>
+      `;
+
+      wrapper.appendChild(toast);
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 4500);
+    }
+
+    // Initialize App
+    renderPackages();
+    syncBalanceUI();
   </script>
 </body>
 </html>
