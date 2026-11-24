@@ -145,7 +145,7 @@
         <svg class="w-5 h-5 text-white flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.75L20.88 6.88V17.12L12 22.25L3.12 17.12V6.88L12 1.75ZM12 3.85L4.95 7.92V16.08L12 20.15L19.05 16.08V7.92L12 3.85ZM9.25 9.25H14.75V14.75H9.25V9.25Z"/>
         </svg>
-        <span id="headerBalance" class="font-bold text-[15px] tracking-tight text-white">495,000,000</span>
+        <span id="headerBalance" class="font-bold text-[15px] tracking-tight text-white">0</span>
       </button>
 
       <!-- Right: [ ↑ Send ] Pill Button -->
@@ -357,14 +357,20 @@
               </div>
               <div class="flex items-center justify-between text-[13px]">
                 <span class="text-rbxMuted">Current balance</span>
-                <span class="font-bold text-white"><span id="step3BalanceDisplay">495,000,000</span> Robux</span>
+                <span class="font-bold text-white"><span id="step3BalanceDisplay">0</span> Robux</span>
+              </div>
+              <div id="insufficientBalanceBanner" class="hidden bg-amber-500/15 border border-amber-500/40 rounded-xl p-2.5 text-[12px] text-amber-300 flex items-center justify-between">
+                <span>Balans yetarli emas! Avval Robux sotib oling.</span>
+                <button type="button" onclick="closeSendModal()" class="ml-2 px-2.5 py-1 rounded-lg bg-amber-400 text-black font-bold text-[11px] flex-shrink-0">
+                  Sotib olish
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         <div class="p-4 border-t border-rbxBorder">
-          <button type="button" onclick="confirmAndSendRobux()" class="w-full bg-rbxBlue hover:bg-rbxBlueHover active:scale-[0.99] text-white font-bold text-[15px] py-3.5 rounded-xl transition shadow-md">
+          <button type="button" id="confirmSendBtn" onclick="confirmAndSendRobux()" class="w-full bg-rbxBlue hover:bg-rbxBlueHover active:scale-[0.99] text-white font-bold text-[15px] py-3.5 rounded-xl transition shadow-md">
             Send Now
           </button>
         </div>
@@ -377,7 +383,7 @@
   <!-- JAVASCRIPT APPLICATION LOGIC                                            -->
   <!-- ======================================================================= -->
   <script>
-    const DEFAULT_BALANCE = 495000000;
+    const DEFAULT_BALANCE = 0;
     let currentBalance = DEFAULT_BALANCE;
     let soundEnabled = true;
     let selectedRecipient = null;
@@ -394,36 +400,40 @@
       { amount: 400,   priceLabel: '₱289.00' }
     ];
 
-    // Pre-loaded "My friends (5)" list
+    // Pre-loaded "My friends (5)" list with authentic Roblox user IDs
     const myFriends = [
       {
         id: 24918201,
         displayName: 'Cid',
         username: 'cid_rbx',
+        archetype: 'spikyGamer',
         isFriend: true,
         mutuals: 4,
         joinedYear: 2018
       },
       {
-        id: 11223344,
-        displayName: 'NoobMaster',
-        username: 'NoobMaster',
+        id: 261,
+        displayName: 'Shedletsky',
+        username: 'Shedletsky',
+        archetype: 'classicNoob',
         isFriend: true,
         mutuals: 7,
-        joinedYear: 2017
+        joinedYear: 2006
       },
       {
         id: 140258990,
         displayName: 'KreekCraft',
         username: 'KreekCraft',
+        archetype: 'spikyGamer',
         isFriend: true,
         mutuals: 2,
-        joinedYear: 2011
+        joinedYear: 2016
       },
       {
         id: 156,
         displayName: 'Builderman',
         username: 'builderman',
+        archetype: 'builderHardhat',
         isFriend: true,
         mutuals: 12,
         joinedYear: 2006
@@ -432,21 +442,332 @@
         id: 1,
         displayName: 'Roblox',
         username: 'Roblox',
+        archetype: 'baconHair',
         isFriend: true,
         mutuals: 9,
         joinedYear: 2006
       }
     ];
 
-    // Curated fallback users for realistic search results (including "po" -> PO3, po3 @frogs2lol, Po3 @Jittyzz)
+    // Curated directory with real Roblox account IDs for authentic original avatars
     const fallbackDirectory = [
-      { id: 9812341, displayName: 'PO3', username: 'PO3', isFriend: false, mutuals: 0, joinedYear: 2020 },
-      { id: 8841293, displayName: 'po3', username: 'frogs2lol', isFriend: false, mutuals: 0, joinedYear: 2019 },
-      { id: 7712934, displayName: 'Po3', username: 'Jittyzz', isFriend: false, mutuals: 0, joinedYear: 2021 },
-      { id: 339310190, displayName: 'Albert', username: 'mrflimflam', isFriend: false, mutuals: 1, joinedYear: 2017 },
-      { id: 61614331, displayName: 'TanqR', username: 'TanqR', isFriend: false, mutuals: 0, joinedYear: 2014 },
-      { id: 121999117, displayName: 'Denis', username: 'DenisDaily', isFriend: false, mutuals: 0, joinedYear: 2016 }
+      { id: 14646067, displayName: 'Linkmon99', username: 'Linkmon99', archetype: 'iceKnight', isFriend: false, mutuals: 0, joinedYear: 2011 },
+      { id: 339310190, displayName: 'Albert', username: 'mrflimflam', archetype: 'baconHair', isFriend: false, mutuals: 1, joinedYear: 2017 },
+      { id: 61614331, displayName: 'TanqR', username: 'TanqR', archetype: 'spikyGamer', isFriend: false, mutuals: 0, joinedYear: 2014 },
+      { id: 121999117, displayName: 'Denis', username: 'DenisDaily', archetype: 'y2kHeadphonesGirl', isFriend: false, mutuals: 0, joinedYear: 2016 },
+      { id: 80254, displayName: 'Stickmasterluke', username: 'Stickmasterluke', archetype: 'scarfAdventurer', isFriend: false, mutuals: 0, joinedYear: 2007 },
+      { id: 1311, displayName: 'Clockwork', username: 'Clockwork', archetype: 'classicNoob', isFriend: false, mutuals: 0, joinedYear: 2006 }
     ];
+
+    const resolvedAvatarCache = new Map();
+
+    // Fetch real Roblox user headshot via roproxy thumbnail endpoint
+    function getHeadshotUrl(user) {
+      const userId = user && typeof user === 'object' ? Number(user.id) : Number(user);
+      if (userId && userId > 0) {
+        if (resolvedAvatarCache.has(userId)) {
+          return resolvedAvatarCache.get(userId);
+        }
+        return `https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`;
+      }
+      return createRobloxAvatarSvg(user && user.username ? user.username : user, user && user.archetype);
+    }
+
+    // Resolve exact Roblox CDN image URLs (tr.rbxcdn.com) in bulk
+    async function resolveRealRobloxAvatars(users) {
+      const ids = [...new Set(users.map(u => Number(u.id)).filter(id => id > 0 && !resolvedAvatarCache.has(id)))];
+      if (ids.length === 0) return;
+
+      try {
+        const res = await fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${ids.join(',')}&size=150x150&format=Png&isCircular=false`);
+        if (!res.ok) return;
+        const json = await res.json();
+        if (json && Array.isArray(json.data)) {
+          json.data.forEach(item => {
+            if (item.targetId && item.imageUrl && item.state === 'Completed') {
+              resolvedAvatarCache.set(Number(item.targetId), item.imageUrl);
+              document.querySelectorAll(`img[data-rbx-uid="${item.targetId}"]`).forEach(img => {
+                img.src = item.imageUrl;
+              });
+              if (selectedRecipient && Number(selectedRecipient.id) === Number(item.targetId)) {
+                selectedRecipient.avatarUrl = item.imageUrl;
+              }
+            }
+          });
+        }
+      } catch (e) {}
+    }
+
+    function createRobloxAvatarSvg(seed, forcedArchetype) {
+      const str = String(seed || 'R').toLowerCase();
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const h = Math.abs(hash);
+
+      const archetypeList = [
+        'spikyGamer',
+        'builderHardhat',
+        'baconHair',
+        'classicNoob',
+        'pinkPigtails',
+        'darkBangsGirl',
+        'iceKnight',
+        'scarfAdventurer',
+        'y2kHeadphonesGirl'
+      ];
+
+      const knownMap = {
+        roblox: 'builderHardhat',
+        builderman: 'builderHardhat',
+        cid_rbx: 'spikyGamer',
+        noobmaster: 'classicNoob',
+        aria_rbx: 'pinkPigtails',
+        baconhero: 'baconHair',
+        po3: 'iceKnight',
+        frogs2lol: 'darkBangsGirl',
+        jittyzz: 'scarfAdventurer',
+        kreekcraft: 'spikyGamer',
+        tanqr: 'iceKnight',
+        luna_style: 'y2kHeadphonesGirl'
+      };
+
+      const type = forcedArchetype || knownMap[str] || archetypeList[h % archetypeList.length];
+      const uid = 'av_' + (h % 99999);
+
+      // Rich 3D-shaded Roblox character templates inspired by the user's reference figures
+      const templates = {
+        // 1. Spiky Brown Hair + Neon Headphones + Smirk (from image 2 top-left)
+        spikyGamer: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1E293B"/><stop offset="100%" stop-color="#0F172A"/></linearGradient>
+            <linearGradient id="${uid}_skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE047"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
+            <linearGradient id="${uid}_hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#78350F"/><stop offset="100%" stop-color="#451A03"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- Torso -->
+          <path d="M22 120 C24 85 38 78 60 78 C82 78 96 85 98 120 Z" fill="#1F2937"/>
+          <path d="M46 78 L60 94 L74 78" fill="#10B981"/>
+          <rect x="51" y="68" width="18" height="12" rx="4" fill="#CA8A04"/>
+          <!-- Headphones -->
+          <rect x="27" y="42" width="9" height="22" rx="4.5" fill="#111827" stroke="#22C55E" stroke-width="2"/>
+          <rect x="84" y="42" width="9" height="22" rx="4.5" fill="#111827" stroke="#22C55E" stroke-width="2"/>
+          <!-- 3D Cylindrical Roblox Head -->
+          <rect x="35" y="32" width="50" height="40" rx="14" fill="url(#${uid}_skin)"/>
+          <ellipse cx="48" cy="48" rx="3.2" ry="4.5" fill="#111827"/>
+          <ellipse cx="72" cy="48" rx="3.2" ry="4.5" fill="#111827"/>
+          <!-- Classic Roblox Smirk with Sparkle -->
+          <path d="M48 59 Q60 64 73 57 L71 62 Q60 66 48 59 Z" fill="#FFFFFF" stroke="#111827" stroke-width="1.5"/>
+          <path d="M74 54 L76 58 L80 60 L76 62 L74 66 L72 62 L68 60 L72 58 Z" fill="#111827"/>
+          <!-- Spiky Anime Hair -->
+          <path d="M32 42 L26 28 L42 26 L38 14 L54 20 L62 10 L72 21 L86 15 L82 29 L93 34 L84 42 C74 32 46 32 32 42 Z" fill="url(#${uid}_hair)"/>
+        `,
+
+        // 2. Builderman Yellow Hardhat + Leather Jacket + Blue Jeans (from image 2 center)
+        builderHardhat: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1E3A5F"/><stop offset="100%" stop-color="#111827"/></linearGradient>
+            <linearGradient id="${uid}_skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FACC15"/><stop offset="100%" stop-color="#CA8A04"/></linearGradient>
+            <linearGradient id="${uid}_hat" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FDE047"/><stop offset="100%" stop-color="#EA580C"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- Jacket & Red Shirt -->
+          <path d="M18 120 C20 84 36 77 60 77 C84 77 100 84 102 120 Z" fill="#374151"/>
+          <path d="M48 77 L60 112 L72 77 Z" fill="#DC2626"/>
+          <path d="M44 77 L54 115 L44 115 Z" fill="#1F2937"/>
+          <path d="M76 77 L66 115 L76 115 Z" fill="#1F2937"/>
+          <rect x="51" y="67" width="18" height="12" rx="4" fill="#CA8A04"/>
+          <!-- Head -->
+          <rect x="35" y="33" width="50" height="39" rx="14" fill="url(#${uid}_skin)"/>
+          <ellipse cx="49" cy="49" rx="3.2" ry="4.6" fill="#111827"/>
+          <ellipse cx="71" cy="49" rx="3.2" ry="4.6" fill="#111827"/>
+          <path d="M50 59 Q60 66 70 59" stroke="#111827" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+          <!-- Hardhat -->
+          <path d="M34 35 C34 16 86 16 86 35 Z" fill="url(#${uid}_hat)"/>
+          <rect x="53" y="16" width="14" height="17" rx="4" fill="#FFEF9F" fill-opacity="0.45"/>
+          <rect x="31" y="32" width="58" height="6" rx="3" fill="#F59E0B"/>
+        `,
+
+        // 3. Classic Bacon Hair Avatar (from image 2 right)
+        baconHair: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#27272A"/><stop offset="100%" stop-color="#18181B"/></linearGradient>
+            <linearGradient id="${uid}_skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E5E7EB"/><stop offset="100%" stop-color="#9CA3AF"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- Black Jacket & Blue Tee -->
+          <path d="M20 120 C22 84 37 77 60 77 C83 77 98 84 100 120 Z" fill="#18181B"/>
+          <rect x="49" y="77" width="22" height="43" fill="#0284C7"/>
+          <rect x="51" y="67" width="18" height="12" rx="4" fill="#9CA3AF"/>
+          <!-- Head -->
+          <rect x="36" y="33" width="48" height="39" rx="14" fill="url(#${uid}_skin)"/>
+          <ellipse cx="49" cy="49" rx="3" ry="4.5" fill="#111827"/>
+          <ellipse cx="71" cy="49" rx="3" ry="4.5" fill="#111827"/>
+          <path d="M51 59 Q60 65 69 59" stroke="#111827" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Iconic Bacon Hair Strands -->
+          <path d="M33 45 C31 24 44 17 60 17 C76 17 89 24 87 45 L81 44 L78 32 L71 42 L65 31 L59 42 L53 31 L47 42 L41 32 L38 44 Z" fill="#5C3A21"/>
+          <path d="M40 22 Q60 14 80 22" stroke="#7C4D2B" stroke-width="4" fill="none" stroke-linecap="round"/>
+        `,
+
+        // 4. Classic Roblox Noob (Yellow Head + Blue Torso + Green Arms, from image 1 & 2)
+        classicNoob: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1D4ED8"/><stop offset="100%" stop-color="#1E1B4B"/></linearGradient>
+            <linearGradient id="${uid}_skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE047"/><stop offset="100%" stop-color="#EAB308"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- Green Arms + Blue Blocky Torso -->
+          <rect x="18" y="78" width="18" height="42" rx="6" fill="#4ADE80"/>
+          <rect x="84" y="78" width="18" height="42" rx="6" fill="#4ADE80"/>
+          <rect x="34" y="76" width="52" height="44" rx="6" fill="#2563EB"/>
+          <rect x="51" y="66" width="18" height="12" rx="4" fill="#CA8A04"/>
+          <!-- Classic Yellow Blocky Head -->
+          <rect x="35" y="28" width="50" height="42" rx="13" fill="url(#${uid}_skin)"/>
+          <ellipse cx="49" cy="46" rx="3.4" ry="4.8" fill="#111827"/>
+          <ellipse cx="71" cy="46" rx="3.4" ry="4.8" fill="#111827"/>
+          <path d="M49 57 Q60 66 71 57" stroke="#111827" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        `,
+
+        // 5. Pink Pigtails Y2K Girl Avatar (from image 3 row 2)
+        pinkPigtails: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4C1D95"/><stop offset="100%" stop-color="#1F1635"/></linearGradient>
+            <linearGradient id="${uid}_hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F9A8D4"/><stop offset="100%" stop-color="#DB2777"/></linearGradient>
+            <linearGradient id="${uid}_skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE6D8"/><stop offset="100%" stop-color="#F3C0A8"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- High Pigtails -->
+          <path d="M35 32 C18 32 16 58 24 72 C30 64 33 52 37 44 Z" fill="url(#${uid}_hair)"/>
+          <path d="M85 32 C102 32 104 58 96 72 C90 64 87 52 83 44 Z" fill="url(#${uid}_hair)"/>
+          <circle cx="34" cy="31" r="4.5" fill="#FFFFFF"/>
+          <circle cx="86" cy="31" r="4.5" fill="#FFFFFF"/>
+          <!-- Crop Top Outfit -->
+          <path d="M26 120 C28 86 40 78 60 78 C80 78 92 86 94 120 Z" fill="url(#${uid}_skin)"/>
+          <path d="M38 80 L82 80 L79 102 L41 102 Z" fill="#F472B6"/>
+          <rect x="52" y="68" width="16" height="12" rx="4" fill="#E5A98E"/>
+          <!-- Head -->
+          <rect x="37" y="31" width="46" height="40" rx="15" fill="url(#${uid}_skin)"/>
+          <!-- Bangs -->
+          <path d="M36 42 C36 22 84 22 84 42 C76 34 65 37 60 41 C55 37 44 34 36 42 Z" fill="url(#${uid}_hair)"/>
+          <!-- Cute Eyes & Blush -->
+          <ellipse cx="49" cy="50" rx="3.2" ry="4.4" fill="#1F2937"/>
+          <ellipse cx="71" cy="50" rx="3.2" ry="4.4" fill="#1F2937"/>
+          <circle cx="48" cy="48.5" r="1.2" fill="#FFFFFF"/>
+          <circle cx="70" cy="48.5" r="1.2" fill="#FFFFFF"/>
+          <ellipse cx="44" cy="55" rx="3.5" ry="1.8" fill="#FB7185" fill-opacity="0.5"/>
+          <ellipse cx="76" cy="55" rx="3.5" ry="1.8" fill="#FB7185" fill-opacity="0.5"/>
+          <path d="M55 59 Q60 63 65 59" stroke="#9F1239" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        `,
+
+        // 6. Dark Long Hair + Bangs + Glasses Girl Avatar (from image 3 row 3)
+        darkBangsGirl: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1F2937"/><stop offset="100%" stop-color="#111827"/></linearGradient>
+            <linearGradient id="${uid}_skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE8DC"/><stop offset="100%" stop-color="#EBC3AE"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- Long Back Hair -->
+          <path d="M32 38 C28 60 28 86 33 102 L87 102 C92 86 92 60 88 38 Z" fill="#18181B"/>
+          <!-- White Top & Dark Denim -->
+          <path d="M26 120 C28 86 40 78 60 78 C80 78 92 86 94 120 Z" fill="url(#${uid}_skin)"/>
+          <path d="M39 79 L81 79 L78 105 L42 105 Z" fill="#F3F4F6"/>
+          <rect x="41" y="105" width="38" height="15" fill="#374151"/>
+          <rect x="52" y="68" width="16" height="12" rx="4" fill="#DFB29B"/>
+          <!-- Head -->
+          <rect x="37" y="31" width="46" height="40" rx="15" fill="url(#${uid}_skin)"/>
+          <!-- Straight Bangs -->
+          <path d="M36 43 C36 21 84 21 84 43 L74 42 L70 36 L65 42 L55 42 L50 36 L46 42 Z" fill="#18181B"/>
+          <!-- Glasses + Eyes -->
+          <rect x="41" y="45" width="15" height="10" rx="3" fill="#FFFFFF" fill-opacity="0.15" stroke="#9CA3AF" stroke-width="1.6"/>
+          <rect x="64" y="45" width="15" height="10" rx="3" fill="#FFFFFF" fill-opacity="0.15" stroke="#9CA3AF" stroke-width="1.6"/>
+          <line x1="56" y1="49" x2="64" y2="49" stroke="#9CA3AF" stroke-width="1.6"/>
+          <circle cx="49" cy="50" r="2.6" fill="#111827"/>
+          <circle cx="71" cy="50" r="2.6" fill="#111827"/>
+          <path d="M55 60 Q60 63 65 60" stroke="#7F1D1D" stroke-width="2" fill="none" stroke-linecap="round"/>
+        `,
+
+        // 7. Ice / Frost Knight Warrior (from image 2 top-right & bottom-right)
+        iceKnight: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0C4A6E"/><stop offset="100%" stop-color="#090D16"/></linearGradient>
+            <linearGradient id="${uid}_armor" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#38BDF8"/><stop offset="100%" stop-color="#1D4ED8"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- Frost Shoulder Pauldrons -->
+          <path d="M16 120 C18 82 35 74 60 74 C85 74 102 82 104 120 Z" fill="url(#${uid}_armor)"/>
+          <path d="M44 76 L60 96 L76 76" fill="none" stroke="#BAE6FD" stroke-width="3"/>
+          <!-- Knight Helmet -->
+          <rect x="35" y="28" width="50" height="44" rx="14" fill="url(#${uid}_armor)" stroke="#BAE6FD" stroke-width="2"/>
+          <!-- Glowing Visor -->
+          <path d="M41 44 L79 44 L75 55 L60 58 L45 55 Z" fill="#090D16"/>
+          <ellipse cx="50" cy="49" rx="4" ry="2.2" fill="#38BDF8"/>
+          <ellipse cx="70" cy="49" rx="4" ry="2.2" fill="#38BDF8"/>
+          <!-- Helmet Crest -->
+          <path d="M55 16 L60 28 L65 16 Z" fill="#E0F2FE"/>
+        `,
+
+        // 8. Orange Hair + Red Scarf Adventurer (from image 2 middle-left)
+        scarfAdventurer: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#312E81"/><stop offset="100%" stop-color="#1E1B4B"/></linearGradient>
+            <linearGradient id="${uid}_skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDBA74"/><stop offset="100%" stop-color="#EA580C"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- Tunic & Red Scarf -->
+          <path d="M22 120 C24 85 38 78 60 78 C82 78 96 85 98 120 Z" fill="#1E3A8A"/>
+          <path d="M36 74 Q60 88 84 74 L80 90 Q60 100 40 90 Z" fill="#DC2626"/>
+          <path d="M46 86 L40 112 L53 112 L56 88 Z" fill="#B91C1C"/>
+          <!-- Head -->
+          <rect x="36" y="31" width="48" height="40" rx="14" fill="url(#${uid}_skin)"/>
+          <ellipse cx="49" cy="48" rx="3.2" ry="4.5" fill="#111827"/>
+          <ellipse cx="71" cy="48" rx="3.2" ry="4.5" fill="#111827"/>
+          <path d="M51 58 Q60 64 69 58" stroke="#111827" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Swept Golden-Orange Hair -->
+          <path d="M33 52 C30 22 46 16 64 17 C80 18 90 28 87 52 C83 36 72 30 58 31 C45 32 38 40 33 52 Z" fill="#D97706"/>
+        `,
+
+        // 9. Y2K Headphones + Twin Braids Girl (from image 3 row 3/4)
+        y2kHeadphonesGirl: `
+          <defs>
+            <linearGradient id="${uid}_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3F2E3E"/><stop offset="100%" stop-color="#191825"/></linearGradient>
+            <linearGradient id="${uid}_skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FDE8DC"/><stop offset="100%" stop-color="#EBC3AE"/></linearGradient>
+          </defs>
+          <rect width="120" height="120" fill="url(#${uid}_bg)"/>
+          <!-- Twin Braids -->
+          <path d="M34 45 L26 92 L35 94 L40 52 Z" fill="#27272A"/>
+          <path d="M86 45 L94 92 L85 94 L80 52 Z" fill="#27272A"/>
+          <!-- Streetwear Top -->
+          <path d="M26 120 C28 86 40 78 60 78 C80 78 92 86 94 120 Z" fill="url(#${uid}_skin)"/>
+          <path d="M39 80 L81 80 L79 106 L41 106 Z" fill="#18181B"/>
+          <rect x="52" y="68" width="16" height="12" rx="4" fill="#DFB29B"/>
+          <!-- Head -->
+          <rect x="37" y="31" width="46" height="40" rx="15" fill="url(#${uid}_skin)"/>
+          <path d="M36 42 C36 22 84 22 84 42 C74 34 46 34 36 42 Z" fill="#27272A"/>
+          <!-- Over-ear Headphones -->
+          <path d="M31 44 C31 20 89 20 89 44" fill="none" stroke="#E5E7EB" stroke-width="4"/>
+          <rect x="28" y="41" width="8" height="19" rx="4" fill="#F3F4F6"/>
+          <rect x="84" y="41" width="8" height="19" rx="4" fill="#F3F4F6"/>
+          <!-- Eyes -->
+          <ellipse cx="49" cy="50" rx="3" ry="4.2" fill="#111827"/>
+          <ellipse cx="71" cy="50" rx="3" ry="4.2" fill="#111827"/>
+          <path d="M55 59 Q60 63 65 59" stroke="#7F1D1D" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        `
+      };
+
+      const bodySvg = templates[type] || templates.spikyGamer;
+      const svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">${bodySvg}</svg>`;
+      return `data:image/svg+xml;utf8,${encodeURIComponent(svgMarkup)}`;
+    }
+
+    function resetSimulator() {
+      playUiSound('tap');
+      currentBalance = DEFAULT_BALANCE;
+      selectedRecipient = null;
+      sendAmount = 0;
+      syncBalanceUI();
+      showTopToast('Balans 0 Robux ga qaytarildi.');
+    }
 
     // Web Audio Chimes
     function playUiSound(type) {
@@ -530,185 +851,11 @@
       return parseInt(String(str || '').replace(/[^0-9]/g, ''), 10) || 0;
     }
 
-    function getHeadshotUrl(userId) {
-      return createRobloxAvatarSvg(userId);
-    }
-
-    function createRobloxAvatarSvg(seed) {
-      const str = String(seed || 'R').toLowerCase();
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      const h = Math.abs(hash);
-
-      // Specific iconic looks for famous accounts + deterministic Roblox avatar traits
-      const knownPresets = {
-        roblox: {
-          bg: '#2A2F3D',
-          skin: '#F5C443',
-          hair: '#1F2937',
-          shirt: '#E5E7EB',
-          accent: '#3574F2',
-          hat: 'cap',
-          face: 'smile',
-          badge: 'R'
-        },
-        builderman: {
-          bg: '#232836',
-          skin: '#F6C645',
-          hair: '#3B2818',
-          shirt: '#2563EB',
-          accent: '#F59E0B',
-          hat: 'cap',
-          face: 'grin',
-          badge: 'BM'
-        },
-        kreekcraft: {
-          bg: '#1D2939',
-          skin: '#F3C096',
-          hair: '#111827',
-          shirt: '#10B981',
-          accent: '#059669',
-          hat: 'beanie',
-          face: 'hyped',
-          badge: 'KC'
-        },
-        mrflimflam: {
-          bg: '#272238',
-          skin: '#FCD5B5',
-          hair: '#78350F',
-          shirt: '#8B5CF6',
-          accent: '#C4B5FD',
-          hat: 'none',
-          face: 'smirk',
-          badge: 'FL'
-        },
-        tanqr: {
-          bg: '#18262F',
-          skin: '#E0AC69',
-          hair: '#18181B',
-          shirt: '#06B6D4',
-          accent: '#0E7490',
-          hat: 'visor',
-          face: 'grin',
-          badge: 'TQ'
-        },
-        denisdaily: {
-          bg: '#2C211D',
-          skin: '#F3C096',
-          hair: '#451A03',
-          shirt: '#F97316',
-          accent: '#FDBA74',
-          hat: 'cap',
-          face: 'smile',
-          badge: 'DD'
-        }
-      };
-
-      const skins = ['#F5C443', '#F3C096', '#E0AC69', '#C68642', '#8D5524', '#FDE68A'];
-      const hairs = ['#111827', '#3B2818', '#78350F', '#4B5563', '#B91C1C', '#1D4ED8'];
-      const shirts = ['#3574F2', '#00B06F', '#EC4899', '#F59E0B', '#8B5CF6', '#EF4444', '#06B6D4'];
-      const bgs = ['#1A1F2C', '#18242B', '#251D33', '#2A201A', '#172822', '#261B24'];
-      const hats = ['cap', 'beanie', 'visor', 'none'];
-      const faces = ['smile', 'grin', 'smirk', 'hyped'];
-
-      const cfg = knownPresets[str] || {
-        bg: bgs[h % bgs.length],
-        skin: skins[(h >> 2) % skins.length],
-        hair: hairs[(h >> 4) % hairs.length],
-        shirt: shirts[(h >> 6) % shirts.length],
-        accent: '#FFFFFF',
-        hat: hats[(h >> 8) % hats.length],
-        face: faces[(h >> 10) % faces.length],
-        badge: ''
-      };
-
-      // Shading helper on skin
-      const eyeColor = '#111318';
-
-      // Hat SVG layer
-      let hatSvg = '';
-      if (cfg.hat === 'cap') {
-        hatSvg = `
-          <path d="M35 36 C35 20, 85 20, 85 36 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
-          <rect x="33" y="34" width="54" height="6" rx="3" fill="${encodeURIComponent(cfg.accent)}"/>
-          <path d="M54 37 L89 37 C92 37, 93 41, 88 42 L54 41 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
-        `;
-      } else if (cfg.hat === 'beanie') {
-        hatSvg = `
-          <path d="M35 38 C35 19, 85 19, 85 38 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
-          <rect x="34" y="33" width="52" height="8" rx="4" fill="${encodeURIComponent(cfg.accent)}"/>
-          <circle cx="60" cy="17" r="6" fill="${encodeURIComponent(cfg.accent)}"/>
-        `;
-      } else if (cfg.hat === 'visor') {
-        hatSvg = `
-          <path d="M36 35 C36 22, 84 22, 84 35 Z" fill="${encodeURIComponent(cfg.hair)}"/>
-          <path d="M35 35 L91 35 C93 35, 93 39, 89 40 L35 39 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
-        `;
-      } else {
-        hatSvg = `
-          <path d="M36 37 C36 21, 84 21, 84 37 C76 31, 44 31, 36 37 Z" fill="${encodeURIComponent(cfg.hair)}"/>
-        `;
-      }
-
-      // Classic Roblox Face SVG layer
-      let faceSvg = `
-        <ellipse cx="49" cy="48" rx="4.2" ry="5.6" fill="${encodeURIComponent(eyeColor)}"/>
-        <ellipse cx="71" cy="48" rx="4.2" ry="5.6" fill="${encodeURIComponent(eyeColor)}"/>
-        <circle cx="47.7" cy="46.2" r="1.4" fill="%23FFFFFF"/>
-        <circle cx="69.7" cy="46.2" r="1.4" fill="%23FFFFFF"/>
-      `;
-
-      if (cfg.face === 'smile') {
-        faceSvg += `<path d="M48 58 Q60 66 72 58" stroke="${encodeURIComponent(eyeColor)}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-      } else if (cfg.face === 'grin') {
-        faceSvg += `
-          <path d="M47 57 Q60 68 73 57 Z" fill="${encodeURIComponent(eyeColor)}"/>
-          <path d="M49 58.5 L71 58.5" stroke="%23FFFFFF" stroke-width="1.6" stroke-linecap="round"/>
-        `;
-      } else if (cfg.face === 'smirk') {
-        faceSvg += `<path d="M51 60 Q61 62 71 56" stroke="${encodeURIComponent(eyeColor)}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-      } else {
-        faceSvg += `<circle cx="60" cy="60" r="4.5" fill="${encodeURIComponent(eyeColor)}"/>`;
-      }
-
-      const badgeSvg = cfg.badge
-        ? `<rect x="44" y="84" width="32" height="15" rx="6" fill="%23111216" fill-opacity="0.45"/><text x="60" y="94.5" font-family="Inter,Arial,sans-serif" font-size="10" font-weight="900" fill="%23FFFFFF" text-anchor="middle">${encodeURIComponent(cfg.badge)}</text>`
-        : '';
-
-      return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-        <rect width="120" height="120" fill="${encodeURIComponent(cfg.bg)}"/>
-        <!-- Shoulders & Roblox Torso -->
-        <path d="M22 120 C24 84, 38 76, 60 76 C82 76, 96 84, 98 120 Z" fill="${encodeURIComponent(cfg.shirt)}"/>
-        <!-- Collar / Hoodie / Stripe detail -->
-        <path d="M48 76 L60 88 L72 76" fill="none" stroke="${encodeURIComponent(cfg.accent)}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Neck -->
-        <rect x="51" y="66" width="18" height="12" rx="4" fill="${encodeURIComponent(cfg.skin)}"/>
-        <!-- Classic Rounded Square Roblox Head -->
-        <rect x="35" y="31" width="50" height="39" rx="14" fill="${encodeURIComponent(cfg.skin)}"/>
-        <!-- Subtle highlight on left/top of head -->
-        <rect x="38" y="34" width="44" height="5" rx="2.5" fill="%23FFFFFF" fill-opacity="0.22"/>
-        ${faceSvg}
-        ${hatSvg}
-        ${badgeSvg}
-      </svg>`;
-    }
-
     function syncBalanceUI() {
       const formatted = formatNumber(currentBalance);
       document.getElementById('headerBalance').innerText = formatted;
       const step3Bal = document.getElementById('step3BalanceDisplay');
       if (step3Bal) step3Bal.innerText = formatted;
-    }
-
-    function resetSimulator() {
-      playUiSound('tap');
-      currentBalance = DEFAULT_BALANCE;
-      selectedRecipient = null;
-      sendAmount = 0;
-      syncBalanceUI();
-      showTopToast('Simulator reset to default balance.');
     }
 
     // Balance Modal Controls
@@ -771,7 +918,6 @@
       currentBalance += pkgAmount;
       syncBalanceUI();
       showTopToast(`Added +${formatNumber(pkgAmount)} Robux to balance!`);
-      launchRobuxFireworks();
     }
 
     // Send Modal Controls
@@ -802,8 +948,16 @@
     function confirmAndSendRobux() {
       if (!selectedRecipient || sendAmount <= 0) return;
 
-      // Deduct from balance (if sendAmount > currentBalance, keep at 0 cleanly)
-      currentBalance = Math.max(0, currentBalance - sendAmount);
+      if (sendAmount > currentBalance) {
+        playUiSound('tap');
+        const banner = document.getElementById('insufficientBalanceBanner');
+        if (banner) banner.classList.remove('hidden');
+        showTopToast('Balans yetarli emas! Avval Robux packages dan sotib oling.');
+        return;
+      }
+
+      // Deduct from balance
+      currentBalance -= sendAmount;
       syncBalanceUI();
 
       const balEl = document.getElementById('headerBalance');
@@ -972,23 +1126,9 @@
       const w = window.innerWidth;
       const h = window.innerHeight;
       const center = w / 2;
-      const spread = Math.min(w * 0.36, 175);
 
-      // Wave 1: Instant center-top celebratory burst + rising rockets
-      createRobuxBurst(center, h * 0.32, 30, 48);
-      launchRocket(center - spread * 0.7, center - spread, h * 0.25);
-      launchRocket(center + spread * 0.7, center + spread, h * 0.25);
-
-      // Wave 2: Delayed side salyut bursts
-      fwTimeouts.push(setTimeout(() => {
-        launchRocket(center, center - spread * 0.45, h * 0.20);
-        launchRocket(center, center + spread * 0.45, h * 0.22);
-      }, 280));
-
-      // Wave 3: Finale center burst
-      fwTimeouts.push(setTimeout(() => {
-        createRobuxBurst(center, h * 0.28, 34, 54);
-      }, 650));
+      // Single crisp celebratory Robux fireworks burst
+      createRobuxBurst(center, h * 0.30, 34, 54);
 
       if (!fwAnimating) {
         fwAnimating = true;
@@ -1085,10 +1225,12 @@
       document.getElementById('step3View').classList.toggle('flex', stepNum === 3);
 
       if (stepNum === 2 && selectedRecipient) {
-        const fallback = createRobloxAvatarSvg(selectedRecipient.username);
+        const fallback = createRobloxAvatarSvg(selectedRecipient.username, selectedRecipient.archetype);
         const img = document.getElementById('step2Avatar');
+        img.dataset.rbxUid = selectedRecipient.id || '';
         img.onerror = () => { img.src = fallback; };
-        img.src = selectedRecipient.avatarUrl || fallback;
+        img.src = getHeadshotUrl(selectedRecipient) || fallback;
+        resolveRealRobloxAvatars([selectedRecipient]);
         document.getElementById('step2Name').innerText = '@' + selectedRecipient.username;
 
         const amtInput = document.getElementById('sendAmountInput');
@@ -1101,11 +1243,12 @@
 
       if (stepNum === 3 && selectedRecipient) {
         syncBalanceUI();
-        const fallback = createRobloxAvatarSvg(selectedRecipient.username);
+        const fallback = createRobloxAvatarSvg(selectedRecipient.username, selectedRecipient.archetype);
         const img = document.getElementById('step3Avatar');
+        img.dataset.rbxUid = selectedRecipient.id || '';
         img.onerror = () => { img.src = fallback; };
-        img.src = selectedRecipient.avatarUrl || fallback;
-
+        img.src = getHeadshotUrl(selectedRecipient) || fallback;
+        resolveRealRobloxAvatars([selectedRecipient]);
         document.getElementById('step3DisplayName').innerText = selectedRecipient.displayName;
         document.getElementById('step3Username').innerText = '@' + selectedRecipient.username;
         document.getElementById('step3ConnectionText').innerText = selectedRecipient.isFriend
@@ -1113,6 +1256,17 @@
           : `New Connection • ${selectedRecipient.mutuals || 0} mutual Connections`;
         document.getElementById('step3JoinedText').innerText = `Joined in ${selectedRecipient.joinedYear || 2019}`;
         document.getElementById('step3AmountDisplay').innerText = formatNumber(sendAmount);
+
+        const banner = document.getElementById('insufficientBalanceBanner');
+        const confirmBtn = document.getElementById('confirmSendBtn');
+        const notEnough = sendAmount > currentBalance;
+        if (banner) banner.classList.toggle('hidden', !notEnough);
+        if (confirmBtn) {
+          confirmBtn.disabled = notEnough;
+          confirmBtn.className = notEnough
+            ? 'w-full bg-rbxBlue/40 text-white/50 cursor-not-allowed font-bold text-[15px] py-3.5 rounded-xl transition'
+            : 'w-full bg-rbxBlue hover:bg-rbxBlueHover active:scale-[0.99] text-white font-bold text-[15px] py-3.5 rounded-xl transition shadow-md cursor-pointer';
+        }
       }
     }
 
@@ -1182,8 +1336,31 @@
 
       // Guarantee at least the exact typed username appears as a selectable result
       if (!seen.has(lower)) {
-        merged.unshift({
-          id: Math.abs(query.split('').reduce((a, b) => a + b.charCodeAt(0), 100000)),
+        let exactUser = null;
+        try {
+          const exactRes = await fetch('https://users.roproxy.com/v1/usernames/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usernames: [query.replace(/\s+/g, '')], excludeBannedUsers: false })
+          });
+          if (exactRes.ok) {
+            const exactJson = await exactRes.json();
+            if (exactJson && Array.isArray(exactJson.data) && exactJson.data.length > 0) {
+              const found = exactJson.data[0];
+              exactUser = {
+                id: found.id,
+                displayName: found.displayName || found.name,
+                username: found.name,
+                isFriend: false,
+                mutuals: 0,
+                joinedYear: 2018 + (found.id % 6)
+              };
+            }
+          }
+        } catch (err) {}
+
+        merged.unshift(exactUser || {
+          id: 0,
           displayName: query,
           username: query.replace(/\s+/g, ''),
           isFriend: false,
@@ -1202,8 +1379,8 @@
       container.innerHTML = '';
 
       users.forEach(user => {
-        const avatarUrl = getHeadshotUrl(user.username || user.id);
-        const fallbackSvg = createRobloxAvatarSvg(user.username || user.id);
+        const avatarUrl = getHeadshotUrl(user);
+        const fallbackSvg = createRobloxAvatarSvg(user.username || user.id, user.archetype);
 
         const row = document.createElement('button');
         row.type = 'button';
@@ -1211,7 +1388,7 @@
         row.onclick = () => {
           selectedRecipient = {
             ...user,
-            avatarUrl: avatarUrl || fallbackSvg
+            avatarUrl: getHeadshotUrl(user) || fallbackSvg
           };
           sendAmount = 0;
           goToStep(2);
@@ -1219,7 +1396,7 @@
 
         row.innerHTML = `
           <div class="w-11 h-11 rounded-full bg-rbxPill border border-[#343741] overflow-hidden flex-shrink-0">
-            <img src="${avatarUrl || fallbackSvg}" alt="${user.username}" onerror="this.src='${fallbackSvg}'" class="w-full h-full object-cover" />
+            <img data-rbx-uid="${user.id || ''}" src="${avatarUrl || fallbackSvg}" alt="${user.username}" onerror="this.src='${fallbackSvg}'" class="w-full h-full object-cover" />
           </div>
           <div class="min-w-0 flex-1">
             <div class="text-[14px] font-bold text-white truncate">${user.displayName}</div>
@@ -1228,6 +1405,8 @@
         `;
         container.appendChild(row);
       });
+
+      resolveRealRobloxAvatars(users);
     }
 
     // Step 2: Amount Input & Presets
@@ -1285,6 +1464,7 @@
     // Initialize App
     renderPackages();
     syncBalanceUI();
+    resolveRealRobloxAvatars([...myFriends, ...fallbackDirectory]);
   </script>
 </body>
 </html>
